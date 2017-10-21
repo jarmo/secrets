@@ -11,7 +11,15 @@ import (
 )
 
 func List(filter string) []secret.Secret {
-  return read()
+  var secrets []secret.Secret
+  for _, secret := range read() {
+    if secret.Id.String() == filter ||
+         strings.Index(strings.ToLower(secret.Name), strings.ToLower(filter)) != -1 {
+      secrets = append(secrets, secret)
+    }
+  }
+
+  return secrets
 }
 
 func Add(name string) secret.Secret {
