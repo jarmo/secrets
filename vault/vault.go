@@ -1,8 +1,11 @@
 package vault
 
 import (
+  "fmt"
+  "strings"
   "os"
   "io/ioutil"
+  "bufio"
   "encoding/json"
   "github.com/jarmo/secrets/secret"
 )
@@ -13,7 +16,15 @@ func List(filter string) []secret.Secret {
 
 func Add(name string) secret.Secret {
   secrets := read()
-  secret := secret.Create(name, "value")
+
+  fmt.Println("Enter value:")
+  var value []string
+  scanner := bufio.NewScanner(os.Stdin)
+  for scanner.Scan() {
+      value = append(value, scanner.Text())
+  }
+
+  secret := secret.Create(name, strings.Join(value, "\n"))
   write(append(secrets, secret))
   return secret
 }
