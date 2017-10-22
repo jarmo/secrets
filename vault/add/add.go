@@ -2,20 +2,11 @@ package add
 
 import (
   "fmt"
-  "os"
-  "bufio"
-  "strings"
   "github.com/jarmo/secrets/secret"
+  "github.com/jarmo/secrets/input"
 )
 
 func Execute(secrets []secret.Secret, name string) (secret.Secret, []secret.Secret) {
-  fmt.Printf("Enter value for '%s':\n", name)
-  var value []string
-  scanner := bufio.NewScanner(os.Stdin)
-  for scanner.Scan() {
-      value = append(value, scanner.Text())
-  }
-
-  newSecret := secret.Create(name, strings.Join(value, "\n"))
+  newSecret := secret.Create(name, input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", name)))
   return newSecret, append(secrets, newSecret)
 }
