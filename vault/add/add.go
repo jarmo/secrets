@@ -9,7 +9,7 @@ import (
 )
 
 func Execute(secrets []secret.Secret, name string) secret.Secret {
-  fmt.Println("Enter value:")
+  fmt.Printf("Enter value for '%s':\n", name)
   var value []string
   scanner := bufio.NewScanner(os.Stdin)
   for scanner.Scan() {

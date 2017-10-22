@@ -13,7 +13,10 @@ const VERSION = "0.0.1"
 func main() {
   switch parsedCommand := cli.Execute(VERSION, os.Args[1:]).(type) {
     case command.List:
-      fmt.Println(vault.List(parsedCommand.Filter))
+      secrets := vault.List(parsedCommand.Filter)
+      for _, secret := range secrets {
+        fmt.Println(secret)
+      }
     case command.Add:
       fmt.Println("Added:", vault.Add(parsedCommand.Name))
     default:
