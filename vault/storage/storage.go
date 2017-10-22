@@ -39,4 +39,3 @@ func Write(password []byte, path string, decryptedSecrets []secret.Secret) {
     panic(err)
   }
 }
-

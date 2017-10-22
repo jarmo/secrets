@@ -15,14 +15,14 @@ func createUsage() string {
   return `secrets
 
 Usage:
-  secrets --list [ID|NAME]
+  secrets --list [ID|NAME|VALUE]
   secrets --add NAME
   secrets --edit ID
   secrets --delete ID
   secrets --change-password
 
 Options:
-  -l --list            List all secrets in the vault or filter by id or name.
+  -l --list            List all secrets in the vault or filter by id, partial name or value.
   -a --add             Add a new secret to the vault.
   -e --edit            Edit secret in the vault by id.
   -d --delete          Delete secret from the vault by id.
