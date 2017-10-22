@@ -1,25 +1,23 @@
 package vault
 
 import (
-  "fmt"
-  "syscall"
   "errors"
+  "github.com/jarmo/secrets/input"
   "github.com/jarmo/secrets/secret"
   "github.com/jarmo/secrets/vault/storage"
   "github.com/jarmo/secrets/vault/add"
   "github.com/jarmo/secrets/vault/list"
   "github.com/jarmo/secrets/vault/delete"
   "github.com/jarmo/secrets/vault/edit"
-  "golang.org/x/crypto/ssh/terminal"
   "github.com/satori/go.uuid"
 )
 
 func List(filter string) []secret.Secret {
-  return list.Execute(storage.Read(askPassword(), storagePath()), filter)
+  return list.Execute(storage.Read(input.AskPassword(), storagePath()), filter)
 }
 
 func Add(name string) secret.Secret {
-  password := askPassword()
+  password := input.AskPassword()
   existingSecrets := storage.Read(password, storagePath())
   newSecret, newSecrets := add.Execute(existingSecrets, name)
   storage.Write(password, storagePath(), newSecrets)
@@ -27,7 +25,7 @@ func Add(name string) secret.Secret {
 }
 
 func Delete(id uuid.UUID) (secret.Secret, error) {
-  password := askPassword()
+  password := input.AskPassword()
   existingSecrets := storage.Read(password, storagePath())
   deletedSecret, newSecrets, err := delete.Execute(existingSecrets, id)
   if err != nil {
@@ -39,7 +37,7 @@ func Delete(id uuid.UUID) (secret.Secret, error) {
 }
 
 func Edit(id uuid.UUID) (*secret.Secret, error) {
-  password := askPassword()
+  password := input.AskPassword()
   existingSecrets := storage.Read(password, storagePath())
   existingSecretIndex := findIndexById(existingSecrets, id)
   if existingSecretIndex == -1 {
@@ -54,17 +52,6 @@ func Edit(id uuid.UUID) (*secret.Secret, error) {
 
 func storagePath() string {
   return "/Users/jarmo/.secrets.json"
-}
-
-func askPassword() []byte {
-  fmt.Print("Enter vault password: ")
-  password, err := terminal.ReadPassword(int(syscall.Stdin))
-  if err != nil {
-    panic(err)
-  }
-  fmt.Println()
-
-  return password
 }
 
 func findIndexById(secrets []secret.Secret, id uuid.UUID) int {

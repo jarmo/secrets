@@ -5,6 +5,8 @@ import (
   "fmt"
   "strings"
   "bufio"
+  "syscall"
+  "golang.org/x/crypto/ssh/terminal"
 )
 
 func Ask(message string) string {
@@ -23,4 +25,15 @@ func AskMultiline(message string) string {
   }
 
   return strings.Join(value, "\n")
+}
+
+func AskPassword() []byte {
+  fmt.Print("Enter vault password: ")
+  password, err := terminal.ReadPassword(int(syscall.Stdin))
+  if err != nil {
+    panic(err)
+  }
+  fmt.Println()
+
+  return password
 }
