@@ -2,6 +2,7 @@ package vault
 
 import (
   "errors"
+  "bytes"
   "github.com/jarmo/secrets/input"
   "github.com/jarmo/secrets/secret"
   "github.com/jarmo/secrets/vault/storage"
@@ -13,11 +14,11 @@ import (
 )
 
 func List(filter string) []secret.Secret {
-  return list.Execute(storage.Read(input.AskPassword(), storagePath()), filter)
+  return list.Execute(storage.Read(askPassword(), storagePath()), filter)
 }
 
 func Add(name string) secret.Secret {
-  password := input.AskPassword()
+  password := askPassword()
   existingSecrets := storage.Read(password, storagePath())
   newSecret, newSecrets := add.Execute(existingSecrets, name)
   storage.Write(password, storagePath(), newSecrets)
@@ -25,7 +26,7 @@ func Add(name string) secret.Secret {
 }
 
 func Delete(id uuid.UUID) (*secret.Secret, error) {
-  password := input.AskPassword()
+  password := askPassword()
   existingSecrets := storage.Read(password, storagePath())
   existingSecretIndex := findIndexById(existingSecrets, id)
   if existingSecretIndex == -1 {
@@ -39,7 +40,7 @@ func Delete(id uuid.UUID) (*secret.Secret, error) {
 }
 
 func Edit(id uuid.UUID) (*secret.Secret, error) {
-  password := input.AskPassword()
+  password := askPassword()
   existingSecrets := storage.Read(password, storagePath())
   existingSecretIndex := findIndexById(existingSecrets, id)
   if existingSecretIndex == -1 {
@@ -52,8 +53,28 @@ func Edit(id uuid.UUID) (*secret.Secret, error) {
   return &editedSecret, nil
 }
 
+func ChangePassword() error {
+  currentPassword := input.AskPassword("Enter vault password: ")
+  secrets := storage.Read(currentPassword, storagePath())
+
+  newPassword := input.AskPassword("Enter new vault password: ")
+  newPasswordConfirmation := input.AskPassword("Enter new vault password again: ")
+
+  if !bytes.Equal(newPassword, newPasswordConfirmation) {
+    return errors.New("Passwords do not match!")
+  }
+
+  storage.Write(newPassword, storagePath(), secrets)
+
+  return nil
+}
+
 func storagePath() string {
   return "/Users/jarmo/.secrets.json"
+}
+
+func askPassword() []byte {
+  return input.AskPassword("Enter vault password: ")
 }
 
 func findIndexById(secrets []secret.Secret, id uuid.UUID) int {

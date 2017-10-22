@@ -27,8 +27,8 @@ func AskMultiline(message string) string {
   return strings.Join(value, "\n")
 }
 
-func AskPassword() []byte {
-  fmt.Print("Enter vault password: ")
+func AskPassword(message string) []byte {
+  fmt.Print(message)
   password, err := terminal.ReadPassword(int(syscall.Stdin))
   if err != nil {
     panic(err)

@@ -35,6 +35,13 @@ func main() {
       } else {
         fmt.Println("Edited:", editedSecret)
       }
+    case command.ChangePassword:
+      if err := vault.ChangePassword(); err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+      } else {
+        fmt.Println("Vault password successfully changed!")
+      }
     default:
       fmt.Printf("Unhandled command: %T\n", parsedCommand)
   }
