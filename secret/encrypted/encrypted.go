@@ -1,7 +1,7 @@
 package encrypted
 
 import (
-  "encoding/hex"
+  "encoding/base64"
 )
 
 type Secret struct {
@@ -11,5 +11,5 @@ type Secret struct {
 }
 
 func Create(data []byte, nonce [24]byte, salt []byte) Secret {
-  return Secret{Data: hex.EncodeToString(data), Nonce: hex.EncodeToString(nonce[:]), Salt: hex.EncodeToString(salt)}
+  return Secret{Data: base64.StdEncoding.EncodeToString(data), Nonce: base64.StdEncoding.EncodeToString(nonce[:]), Salt: base64.StdEncoding.EncodeToString(salt)}
 }

@@ -1,7 +1,7 @@
 package crypto
 
 import (
-  "encoding/hex"
+  "encoding/base64"
   "crypto/rand"
   "encoding/json"
   "golang.org/x/crypto/scrypt"
@@ -25,10 +25,10 @@ func Encrypt(password []byte, secret secret.Secret) encrypted.Secret {
 }
 
 func Decrypt(password []byte, encryptedSecret encrypted.Secret) secret.Secret {
-  salt, _ := hex.DecodeString(encryptedSecret.Salt)
+  salt, _ := base64.StdEncoding.DecodeString(encryptedSecret.Salt)
   secretKey := calculateSecretKey(password, []byte(salt))
-  data, _ := hex.DecodeString(encryptedSecret.Data)
-  nonceBytes, _ := hex.DecodeString(encryptedSecret.Nonce)
+  data, _ := base64.StdEncoding.DecodeString(encryptedSecret.Data)
+  nonceBytes, _ := base64.StdEncoding.DecodeString(encryptedSecret.Nonce)
   var nonce [24]byte
   copy(nonce[:], nonceBytes)
   var decryptedSecret secret.Secret
@@ -46,7 +46,7 @@ func calculateSecretKey(password, salt []byte) [32]byte {
   cpuFactor := 32768
   memoryFactor := 8
   parallelFactor := 1
-  keyLength := 64
+  keyLength := 32
 
   secretKeyBytes, err := scrypt.Key(password, salt, cpuFactor, memoryFactor, parallelFactor, keyLength)
   if err != nil {
