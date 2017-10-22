@@ -24,16 +24,18 @@ func Add(name string) secret.Secret {
   return newSecret
 }
 
-func Delete(id uuid.UUID) (secret.Secret, error) {
+func Delete(id uuid.UUID) (*secret.Secret, error) {
   password := input.AskPassword()
   existingSecrets := storage.Read(password, storagePath())
-  deletedSecret, newSecrets, err := delete.Execute(existingSecrets, id)
-  if err != nil {
-    return deletedSecret, err
+  existingSecretIndex := findIndexById(existingSecrets, id)
+  if existingSecretIndex == -1 {
+    return nil, errors.New("Secret by specified id not found!")
   }
+
+  deletedSecret, newSecrets := delete.Execute(existingSecrets, existingSecretIndex)
   storage.Write(password, storagePath(), newSecrets)
 
-  return deletedSecret, nil
+  return &deletedSecret, nil
 }
 
 func Edit(id uuid.UUID) (*secret.Secret, error) {
