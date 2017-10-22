@@ -32,6 +32,7 @@ func askPassword() []byte {
   if err != nil {
     panic(err)
   }
+  fmt.Println()
 
   return password
 }
