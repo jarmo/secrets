@@ -27,6 +27,14 @@ func main() {
       } else {
         fmt.Println("Deleted:", deletedSecret)
       }
+    case command.Edit:
+      editedSecret, err := vault.Edit(parsedCommand.Id)
+      if err != nil {
+        fmt.Println(err)
+        os.Exit(1)
+      } else {
+        fmt.Println("Edited:", editedSecret)
+      }
     default:
       fmt.Printf("Unhandled command: %T\n", parsedCommand)
   }
