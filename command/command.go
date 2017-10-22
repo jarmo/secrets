@@ -1,4 +1,4 @@
-package commands
+package command
 
 type List struct {
   Filter string
