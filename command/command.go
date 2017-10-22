@@ -1,5 +1,9 @@
 package command
 
+import (
+  "github.com/satori/go.uuid"
+)
+
 type List struct {
   Filter string
 }
@@ -9,11 +13,11 @@ type Add struct {
 }
 
 type Edit struct {
-  Id string
+  Id uuid.UUID
 }
 
 type Delete struct {
-  Id string
+  Id uuid.UUID
 }
 
 type ChangePassword struct {

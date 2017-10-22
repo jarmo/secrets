@@ -7,7 +7,9 @@ import (
   "github.com/jarmo/secrets/vault/storage"
   "github.com/jarmo/secrets/vault/add"
   "github.com/jarmo/secrets/vault/list"
+  "github.com/jarmo/secrets/vault/delete"
   "golang.org/x/crypto/ssh/terminal"
+  "github.com/satori/go.uuid"
 )
 
 func List(filter string) []secret.Secret {
@@ -17,9 +19,21 @@ func List(filter string) []secret.Secret {
 func Add(name string) secret.Secret {
   password := askPassword()
   existingSecrets := storage.Read(password, storagePath())
-  newSecret := add.Execute(existingSecrets, name)
-  storage.Write(password, storagePath(), append(existingSecrets, newSecret))
+  newSecret, newSecrets := add.Execute(existingSecrets, name)
+  storage.Write(password, storagePath(), newSecrets)
   return newSecret
+}
+
+func Delete(id uuid.UUID) (secret.Secret, error) {
+  password := askPassword()
+  existingSecrets := storage.Read(password, storagePath())
+  deletedSecret, newSecrets, err := delete.Execute(existingSecrets, id)
+  if err != nil {
+    return deletedSecret, err
+  }
+  storage.Write(password, storagePath(), newSecrets)
+
+  return deletedSecret, nil
 }
 
 func storagePath() string {

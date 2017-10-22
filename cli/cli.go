@@ -3,6 +3,7 @@ package cli
 import (
   "github.com/jarmo/secrets/command"
   "github.com/docopt/docopt-go"
+  "github.com/satori/go.uuid"
 )
 
 func Execute(version string, args []string) interface{} {
@@ -40,9 +41,11 @@ func createCommand(arguments map[string]interface {}) interface{} {
   } else if arguments["--add"].(bool) {
     return command.Add{Name: arguments["NAME"].(string)}
   } else if arguments["--edit"].(bool) {
-    return command.Edit{Id: arguments["ID"].(string)}
-  } else if arguments["--edit"].(bool) {
-    return command.Delete{Id: arguments["ID"].(string)}
+    id, _ := uuid.FromString(arguments["ID"].(string))
+    return command.Edit{Id: id}
+  } else if arguments["--delete"].(bool) {
+    id, _ := uuid.FromString(arguments["ID"].(string))
+    return command.Delete{Id: id}
   } else if arguments["--change-password"].(bool) {
     return command.ChangePassword{}
   } else {
