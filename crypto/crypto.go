@@ -43,12 +43,12 @@ func Decrypt(password []byte, encryptedSecret encrypted.Secret) secret.Secret {
 }
 
 func calculateSecretKey(password, salt []byte) [32]byte {
-  cpuFactor := 32768
-  memoryFactor := 8
-  parallelFactor := 1
+  N := 16384
+  r := 8
+  p := 2
   keyLength := 32
 
-  secretKeyBytes, err := scrypt.Key(password, salt, cpuFactor, memoryFactor, parallelFactor, keyLength)
+  secretKeyBytes, err := scrypt.Key(password, salt, N, r, p, keyLength)
   if err != nil {
     panic(err)
   }
