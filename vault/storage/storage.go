@@ -6,32 +6,23 @@ import(
   "encoding/json"
   "github.com/jarmo/secrets/crypto"
   "github.com/jarmo/secrets/secret"
-  "github.com/jarmo/secrets/secret/encrypted"
 )
 
 func Read(password []byte, path string) []secret.Secret {
   if encryptedSecretsJSON, err := ioutil.ReadFile(path); os.IsNotExist(err) {
     return make([]secret.Secret, 0)
   } else {
-    var encryptedSecrets []encrypted.Secret
+    var encryptedSecrets crypto.Encrypted
     if err := json.Unmarshal(encryptedSecretsJSON, &encryptedSecrets); err != nil {
       panic(err)
     }
 
-    var decryptedSecrets []secret.Secret
-    for _, encryptedSecret := range encryptedSecrets {
-      decryptedSecrets = append(decryptedSecrets, crypto.Decrypt(password, encryptedSecret))
-    }
-
-    return decryptedSecrets
+    return crypto.Decrypt(password, encryptedSecrets)
   }
 }
 
 func Write(password []byte, path string, decryptedSecrets []secret.Secret) {
-  var encryptedSecrets []encrypted.Secret
-  for _, decryptedSecret := range decryptedSecrets {
-    encryptedSecrets = append(encryptedSecrets, crypto.Encrypt(password, decryptedSecret))
-  }
+  encryptedSecrets := crypto.Encrypt(password, decryptedSecrets)
 
   if encryptedSecretsJSON, err := json.Marshal(encryptedSecrets); err != nil {
     panic(err)

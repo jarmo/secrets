@@ -7,6 +7,6 @@ import (
 )
 
 func Execute(secrets []secret.Secret, name string) (secret.Secret, []secret.Secret) {
-  newSecret := secret.Create(name, input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", name)))
+  newSecret := secret.New(name, input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", name)))
   return newSecret, append(secrets, newSecret)
 }

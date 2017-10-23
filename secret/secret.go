@@ -11,7 +11,7 @@ type Secret struct {
   Value string
 }
 
-func Create(name, value string) Secret {
+func New(name, value string) Secret {
   return Secret{uuid.NewV4(), name, value}
 }
 

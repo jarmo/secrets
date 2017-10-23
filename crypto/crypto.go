@@ -7,11 +7,16 @@ import (
   "golang.org/x/crypto/scrypt"
   "golang.org/x/crypto/nacl/secretbox"
   "github.com/jarmo/secrets/secret"
-  "github.com/jarmo/secrets/secret/encrypted"
 )
 
-func Encrypt(password []byte, secret secret.Secret) encrypted.Secret {
-  if encryptedSecretJSON, err := json.Marshal(secret); err != nil {
+type Encrypted struct {
+  Data string
+  Nonce string
+  Salt string
+}
+
+func Encrypt(password []byte, secrets []secret.Secret) Encrypted {
+  if encryptedSecretJSON, err := json.Marshal(secrets); err != nil {
     panic(err)
   } else {
     salt := generateRandomBytes(32)
@@ -19,27 +24,27 @@ func Encrypt(password []byte, secret secret.Secret) encrypted.Secret {
     var nonce [24]byte
     copy(nonce[:], generateRandomBytes(24))
 
-    encryptedSecretData := secretbox.Seal(nil, encryptedSecretJSON, &nonce, &secretKey)
-    return encrypted.Create(encryptedSecretData, nonce, salt)
+    data := secretbox.Seal(nil, encryptedSecretJSON, &nonce, &secretKey)
+    return Encrypted{Data: base64.StdEncoding.EncodeToString(data), Nonce: base64.StdEncoding.EncodeToString(nonce[:]), Salt: base64.StdEncoding.EncodeToString(salt)}
   }
 }
 
-func Decrypt(password []byte, encryptedSecret encrypted.Secret) secret.Secret {
-  salt, _ := base64.StdEncoding.DecodeString(encryptedSecret.Salt)
+func Decrypt(password []byte, encryptedSecrets Encrypted) []secret.Secret {
+  salt, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Salt)
   secretKey := calculateSecretKey(password, []byte(salt))
-  data, _ := base64.StdEncoding.DecodeString(encryptedSecret.Data)
-  nonceBytes, _ := base64.StdEncoding.DecodeString(encryptedSecret.Nonce)
+  data, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Data)
+  nonceBytes, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Nonce)
   var nonce [24]byte
   copy(nonce[:], nonceBytes)
-  var decryptedSecret secret.Secret
+  var decryptedSecrets []secret.Secret
 
-  if decryptedSecretJSON, ok := secretbox.Open(nil, data, &nonce, &secretKey); !ok {
+  if decryptedSecretsJSON, ok := secretbox.Open(nil, data, &nonce, &secretKey); !ok {
     panic("Invalid password!")
-  } else if err := json.Unmarshal(decryptedSecretJSON, &decryptedSecret); err != nil {
+  } else if err := json.Unmarshal(decryptedSecretsJSON, &decryptedSecrets); err != nil {
     panic(err)
   }
 
-  return decryptedSecret
+  return decryptedSecrets
 }
 
 func calculateSecretKey(password, salt []byte) [32]byte {
