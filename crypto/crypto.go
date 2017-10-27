@@ -1,6 +1,8 @@
 package crypto
 
 import (
+  "fmt"
+  "os"
   "encoding/base64"
   "crypto/rand"
   "encoding/json"
@@ -39,7 +41,8 @@ func Decrypt(password []byte, encryptedSecrets Encrypted) []secret.Secret {
   var decryptedSecrets []secret.Secret
 
   if decryptedSecretsJSON, ok := secretbox.Open(nil, data, &nonce, &secretKey); !ok {
-    panic("Invalid password!")
+    fmt.Println("Invalid vault password!")
+    os.Exit(1)
   } else if err := json.Unmarshal(decryptedSecretsJSON, &decryptedSecrets); err != nil {
     panic(err)
   }
