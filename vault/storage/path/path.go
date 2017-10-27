@@ -23,8 +23,8 @@ func Get() string {
   currentUser, _ := user.Current()
   currentUserHome := currentUser.HomeDir
 
-  secretsConfigurationPath := filepath.Join(currentUserHome, "/.secrets.conf.json")
-  if configJSON, err := ioutil.ReadFile(secretsConfigurationPath); os.IsNotExist(err) {
+  configurationPath := filepath.Join(currentUserHome, "/.secrets.conf.json")
+  if configJSON, err := ioutil.ReadFile(configurationPath); os.IsNotExist(err) {
     if path := dropBoxPath(currentUserHome); path != "" {
       return filepath.Join(path, ".secrets.json")
     }
@@ -36,8 +36,7 @@ func Get() string {
   }
 
   fmt.Println("Vault was not found!")
-  vaultPath := input.Ask("Enter vault absolute path: ")
-  fmt.Println()
+  vaultPath := askAndStorePathFromUser(configurationPath)
 
   return vaultPath
 }
@@ -64,4 +63,17 @@ func dropBoxPath(currentUserHome string) string {
   }
 
   return ""
+}
+
+func askAndStorePathFromUser(configurationPath string) string {
+  vaultPath := input.Ask("Enter vault absolute path: ")
+  fmt.Println()
+
+  if configJSON, err := json.Marshal(config{vaultPath}); err != nil {
+    panic(err)
+  } else if err := ioutil.WriteFile(configurationPath, configJSON, 0600); err != nil {
+    panic(err)
+  }
+
+  return vaultPath
 }
