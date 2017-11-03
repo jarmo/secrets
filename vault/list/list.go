@@ -2,6 +2,7 @@ package list
 
 import (
   "strings"
+  "sort"
   "github.com/jarmo/secrets/secret"
 )
 
@@ -15,5 +16,10 @@ func Execute(secrets []secret.Secret, filter string) []secret.Secret {
     }
   }
 
-  return matches
+  return sortByName(matches)
+}
+
+func sortByName(secrets []secret.Secret) []secret.Secret {
+  sort.Slice(secrets, func(i, j int) bool { return secrets[i].Name < secrets[j].Name })
+  return secrets
 }
