@@ -24,7 +24,7 @@ func AskMultiline(message string) string {
       value = append(value, scanner.Text())
   }
 
-  return strings.Join(value, "\n")
+  return replaceUnprintableCharacters(strings.Join(value, "\n"))
 }
 
 func AskPassword(message string) []byte {
@@ -36,4 +36,15 @@ func AskPassword(message string) []byte {
   fmt.Println()
 
   return password
+}
+
+func replaceUnprintableCharacters(s string) string {
+  ctrlD, ctrlX, ctrlZ := "\x04", "\x18", "\x1A"
+
+  return strings.Replace(
+    strings.Replace(
+      strings.Replace(s,
+      ctrlD, "", -1),
+      ctrlX, "", -1),
+      ctrlZ, "", -1)
 }
