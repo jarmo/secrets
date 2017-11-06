@@ -16,7 +16,7 @@ windows:
 	GOOS=windows GOARCH=${GOARCH} go build -o bin/${BINARY}-windows-${GOARCH}.exe
 
 test:
-	go test ./...
+	go test -v ./...
 
 install: test
 	go install
