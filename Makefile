@@ -1,5 +1,6 @@
 BINARY = secrets
 GOARCH = amd64
+PREFIX ?= ${GOPATH}
 
 all: test clean linux darwin windows
 
@@ -7,18 +8,18 @@ clean:
 	rm -rf bin/
 
 linux:
-	GOOS=linux GOARCH=${GOARCH} go build -o bin/${BINARY}-linux-${GOARCH}
+	GOOS=linux GOARCH=${GOARCH} go build -o bin/linux_${GOARCH}/${BINARY}
 
 darwin:
-	GOOS=darwin GOARCH=${GOARCH} go build -o bin/${BINARY}-darwin-${GOARCH}
+	GOOS=darwin GOARCH=${GOARCH} go build -o bin/darwin_${GOARCH}/${BINARY}
 
 windows:
-	GOOS=windows GOARCH=${GOARCH} go build -o bin/${BINARY}-windows-${GOARCH}.exe
+	GOOS=windows GOARCH=${GOARCH} go build -o bin/windows_${GOARCH}/${BINARY}.exe
 
 test:
 	go test -v ./...
 
-install: test
-	go install
+install:
+	cp -Rf bin/ ${PREFIX}/bin
 
-.PHONY: all test clean linux darwin windows
+.PHONY: all test clean linux darwin windows install
