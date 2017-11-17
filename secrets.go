@@ -20,9 +20,10 @@ func main() {
         fmt.Println(secret)
       }
     case command.Add:
+      password := askPassword()
       secretName := parsedCommand.Name
       secretValue := input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", parsedCommand.Name))
-      fmt.Println("Added:", vault.Add(secretName, secretValue, path.Get(), askPassword()))
+      fmt.Println("Added:", vault.Add(secretName, secretValue, path.Get(), password))
     case command.Delete:
       deletedSecret, err := vault.Delete(parsedCommand.Id, path.Get(), askPassword())
       if err != nil {
@@ -32,9 +33,10 @@ func main() {
         fmt.Println("Deleted:", deletedSecret)
       }
     case command.Edit:
+      password := askPassword()
       newName := input.Ask(fmt.Sprintf("Enter new name: "))
       newValue := input.AskMultiline("Enter new value:\n")
-      editedSecret, err := vault.Edit(parsedCommand.Id, newName, newValue, path.Get(), askPassword())
+      editedSecret, err := vault.Edit(parsedCommand.Id, newName, newValue, path.Get(), password)
       if err != nil {
         fmt.Println(err)
         os.Exit(1)
@@ -42,10 +44,11 @@ func main() {
         fmt.Println("Edited:", editedSecret)
       }
     case command.ChangePassword:
+      currentPassword := askPassword()
       newPassword := input.AskPassword("Enter new vault password: ")
       newPasswordConfirmation := input.AskPassword("Enter new vault password again: ")
 
-      if err := vault.ChangePassword(path.Get(), askPassword(), newPassword, newPasswordConfirmation); err != nil {
+      if err := vault.ChangePassword(path.Get(), currentPassword, newPassword, newPasswordConfirmation); err != nil {
         fmt.Println(err)
         os.Exit(1)
       } else {
