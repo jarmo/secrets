@@ -36,7 +36,7 @@ func Delete(id uuid.UUID, storagePath string, password []byte) (*secret.Secret, 
   return &deletedSecret, nil
 }
 
-func Edit(id uuid.UUID, storagePath, newName, newValue string, password []byte) (*secret.Secret, error) {
+func Edit(id uuid.UUID, newName, newValue, storagePath string, password []byte) (*secret.Secret, error) {
   existingSecrets := storage.Read(password, storagePath)
   existingSecretIndex := findIndexById(existingSecrets, id)
   if existingSecretIndex == -1 {
