@@ -53,7 +53,7 @@ func Edit(id uuid.UUID) (*secret.Secret, error) {
     return nil, errors.New("Secret by specified id not found!")
   }
 
-  editedSecret, newSecrets := edit.Execute(existingSecrets, existingSecretIndex)
+  editedSecret, newSecrets := edit.Execute(existingSecrets, existingSecretIndex, input.Ask(fmt.Sprintf("Enter new name: ")), input.AskMultiline("Enter new value:\n"))
   storage.Write(password, storagePath, newSecrets)
 
   return &editedSecret, nil

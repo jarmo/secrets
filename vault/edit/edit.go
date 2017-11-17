@@ -1,16 +1,14 @@
 package edit
 
 import (
-  "fmt"
   "github.com/jarmo/secrets/secret"
-  "github.com/jarmo/secrets/input"
 )
 
-func Execute(secrets []secret.Secret, index int) (secret.Secret, []secret.Secret) {
+func Execute(secrets []secret.Secret, index int, newName, newValue string) (secret.Secret, []secret.Secret) {
   editedSecret := secrets[index]
-  newSecret := secret.New(input.Ask(fmt.Sprintf("Enter new name for '%s': ", editedSecret.Name)), input.AskMultiline("Enter new value:\n"))
+  newSecret := secret.New(newName, newValue)
   newSecret.Id = editedSecret.Id
   secrets[index] = newSecret
-  return editedSecret, secrets
+  return newSecret, secrets
 }
 
