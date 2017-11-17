@@ -4,7 +4,7 @@ checkout:
     - chmod +x dep
 dependencies:
   override:
-    - dep ensure -no-vendor
+    - ./dep ensure -no-vendor
 test:
   override:
     - make test
