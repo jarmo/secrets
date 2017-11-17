@@ -3,11 +3,8 @@ package vault
 import (
   "errors"
   "bytes"
-  "fmt"
-  "github.com/jarmo/secrets/input"
   "github.com/jarmo/secrets/secret"
   "github.com/jarmo/secrets/vault/storage"
-  "github.com/jarmo/secrets/vault/storage/path"
   "github.com/jarmo/secrets/vault/add"
   "github.com/jarmo/secrets/vault/list"
   "github.com/jarmo/secrets/vault/delete"
@@ -15,23 +12,18 @@ import (
   "github.com/satori/go.uuid"
 )
 
-func List(filter string) []secret.Secret {
-  storagePath := path.Get()
-  return list.Execute(storage.Read(askPassword(), storagePath), filter)
+func List(filter, storagePath string, password []byte) []secret.Secret {
+  return list.Execute(storage.Read(password, storagePath), filter)
 }
 
-func Add(name string) secret.Secret {
-  storagePath := path.Get()
-  password := askPassword()
+func Add(name, value, storagePath string, password []byte) secret.Secret {
   existingSecrets := storage.Read(password, storagePath)
-  newSecret, newSecrets := add.Execute(existingSecrets, name, input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", name)))
+  newSecret, newSecrets := add.Execute(existingSecrets, name, value)
   storage.Write(password, storagePath, newSecrets)
   return newSecret
 }
 
-func Delete(id uuid.UUID) (*secret.Secret, error) {
-  storagePath := path.Get()
-  password := askPassword()
+func Delete(id uuid.UUID, storagePath string, password []byte) (*secret.Secret, error) {
   existingSecrets := storage.Read(password, storagePath)
   existingSecretIndex := findIndexById(existingSecrets, id)
   if existingSecretIndex == -1 {
@@ -44,28 +36,21 @@ func Delete(id uuid.UUID) (*secret.Secret, error) {
   return &deletedSecret, nil
 }
 
-func Edit(id uuid.UUID) (*secret.Secret, error) {
-  storagePath := path.Get()
-  password := askPassword()
+func Edit(id uuid.UUID, storagePath, newName, newValue string, password []byte) (*secret.Secret, error) {
   existingSecrets := storage.Read(password, storagePath)
   existingSecretIndex := findIndexById(existingSecrets, id)
   if existingSecretIndex == -1 {
     return nil, errors.New("Secret by specified id not found!")
   }
 
-  editedSecret, newSecrets := edit.Execute(existingSecrets, existingSecretIndex, input.Ask(fmt.Sprintf("Enter new name: ")), input.AskMultiline("Enter new value:\n"))
+  editedSecret, newSecrets := edit.Execute(existingSecrets, existingSecretIndex, newName, newValue)
   storage.Write(password, storagePath, newSecrets)
 
   return &editedSecret, nil
 }
 
-func ChangePassword() error {
-  storagePath := path.Get()
-  currentPassword := input.AskPassword("Enter vault password: ")
+func ChangePassword(storagePath string, currentPassword, newPassword, newPasswordConfirmation []byte) error {
   secrets := storage.Read(currentPassword, storagePath)
-
-  newPassword := input.AskPassword("Enter new vault password: ")
-  newPasswordConfirmation := input.AskPassword("Enter new vault password again: ")
 
   if !bytes.Equal(newPassword, newPasswordConfirmation) {
     return errors.New("Passwords do not match!")
@@ -74,10 +59,6 @@ func ChangePassword() error {
   storage.Write(newPassword, storagePath, secrets)
 
   return nil
-}
-
-func askPassword() []byte {
-  return input.AskPassword("Enter vault password: ")
 }
 
 func findIndexById(secrets []secret.Secret, id uuid.UUID) int {

@@ -6,6 +6,8 @@ import (
   "github.com/jarmo/secrets/cli"
   "github.com/jarmo/secrets/cli/command"
   "github.com/jarmo/secrets/vault"
+  "github.com/jarmo/secrets/vault/storage/path"
+  "github.com/jarmo/secrets/input"
 )
 
 const VERSION = "0.0.1"
@@ -13,14 +15,16 @@ const VERSION = "0.0.1"
 func main() {
   switch parsedCommand := cli.Execute(VERSION, os.Args[1:]).(type) {
     case command.List:
-      secrets := vault.List(parsedCommand.Filter)
+      secrets := vault.List(parsedCommand.Filter, path.Get(), askPassword())
       for _, secret := range secrets {
         fmt.Println(secret)
       }
     case command.Add:
-      fmt.Println("Added:", vault.Add(parsedCommand.Name))
+      secretName := parsedCommand.Name
+      secretValue := input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", parsedCommand.Name))
+      fmt.Println("Added:", vault.Add(secretName, secretValue, path.Get(), askPassword()))
     case command.Delete:
-      deletedSecret, err := vault.Delete(parsedCommand.Id)
+      deletedSecret, err := vault.Delete(parsedCommand.Id, path.Get(), askPassword())
       if err != nil {
         fmt.Println(err)
         os.Exit(1)
@@ -28,7 +32,9 @@ func main() {
         fmt.Println("Deleted:", deletedSecret)
       }
     case command.Edit:
-      editedSecret, err := vault.Edit(parsedCommand.Id)
+      newName := input.Ask(fmt.Sprintf("Enter new name: "))
+      newValue := input.AskMultiline("Enter new value:\n")
+      editedSecret, err := vault.Edit(parsedCommand.Id, newName, newValue, path.Get(), askPassword())
       if err != nil {
         fmt.Println(err)
         os.Exit(1)
@@ -36,7 +42,10 @@ func main() {
         fmt.Println("Edited:", editedSecret)
       }
     case command.ChangePassword:
-      if err := vault.ChangePassword(); err != nil {
+      newPassword := input.AskPassword("Enter new vault password: ")
+      newPasswordConfirmation := input.AskPassword("Enter new vault password again: ")
+
+      if err := vault.ChangePassword(path.Get(), askPassword(), newPassword, newPasswordConfirmation); err != nil {
         fmt.Println(err)
         os.Exit(1)
       } else {
@@ -45,4 +54,8 @@ func main() {
     default:
       fmt.Printf("Unhandled command: %T\n", parsedCommand)
   }
+}
+
+func askPassword() []byte {
+  return input.AskPassword("Enter vault password: ")
 }
