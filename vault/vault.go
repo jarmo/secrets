@@ -3,6 +3,7 @@ package vault
 import (
   "errors"
   "bytes"
+  "fmt"
   "github.com/jarmo/secrets/input"
   "github.com/jarmo/secrets/secret"
   "github.com/jarmo/secrets/vault/storage"
@@ -23,7 +24,7 @@ func Add(name string) secret.Secret {
   storagePath := path.Get()
   password := askPassword()
   existingSecrets := storage.Read(password, storagePath)
-  newSecret, newSecrets := add.Execute(existingSecrets, name)
+  newSecret, newSecrets := add.Execute(existingSecrets, name, input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", name)))
   storage.Write(password, storagePath, newSecrets)
   return newSecret
 }

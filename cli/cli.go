@@ -1,7 +1,7 @@
 package cli
 
 import (
-  "github.com/jarmo/secrets/command"
+  "github.com/jarmo/secrets/cli/command"
   "github.com/docopt/docopt-go"
   "github.com/satori/go.uuid"
 )

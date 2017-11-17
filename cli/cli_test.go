@@ -3,7 +3,7 @@ package cli
 import (
   "testing"
   "fmt"
-  "github.com/jarmo/secrets/command"
+  "github.com/jarmo/secrets/cli/command"
   "github.com/satori/go.uuid"
 )
 
