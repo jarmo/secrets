@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  name = "github.com/docopt/docopt-go"
-  packages = ["."]
-  revision = "784ddc588536785e7299f7272f39101f7faccc3f"
-  version = "0.6.2"
-
-[[projects]]
   name = "github.com/satori/go.uuid"
   packages = ["."]
   revision = "879c5887cd475cd7864858769793b2ceb0d44feb"
