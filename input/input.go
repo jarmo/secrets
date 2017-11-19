@@ -11,9 +11,9 @@ import (
 
 func Ask(message string) string {
   fmt.Print(message)
-  var value string
-  fmt.Scanln(&value)
-  return value
+  scanner := bufio.NewScanner(os.Stdin)
+  scanner.Scan()
+  return scanner.Text()
 }
 
 func AskMultiline(message string) string {
