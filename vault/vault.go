@@ -16,24 +16,19 @@ func List(secrets []secret.Secret, filter string) []secret.Secret {
   return list.Execute(secrets, filter)
 }
 
-func Add(name, value, storagePath string, password []byte) secret.Secret {
-  existingSecrets := storage.Read(password, storagePath)
-  newSecret, newSecrets := add.Execute(existingSecrets, name, value)
-  storage.Write(password, storagePath, newSecrets)
-  return newSecret
+func Add(secrets []secret.Secret, name, value string) (secret.Secret, []secret.Secret) {
+  newSecret, newSecrets := add.Execute(secrets, name, value)
+  return newSecret, newSecrets
 }
 
-func Delete(id uuid.UUID, storagePath string, password []byte) (*secret.Secret, error) {
-  existingSecrets := storage.Read(password, storagePath)
-  existingSecretIndex := findIndexById(existingSecrets, id)
+func Delete(secrets []secret.Secret, id uuid.UUID) (*secret.Secret, []secret.Secret, error) {
+  existingSecretIndex := findIndexById(secrets, id)
   if existingSecretIndex == -1 {
-    return nil, errors.New("Secret by specified id not found!")
+    return nil, secrets, errors.New("Secret by specified id not found!")
   }
 
-  deletedSecret, newSecrets := delete.Execute(existingSecrets, existingSecretIndex)
-  storage.Write(password, storagePath, newSecrets)
-
-  return &deletedSecret, nil
+  deletedSecret, newSecrets := delete.Execute(secrets, existingSecretIndex)
+  return &deletedSecret, newSecrets, nil
 }
 
 func Edit(id uuid.UUID, newName, newValue, storagePath string, password []byte) (*secret.Secret, error) {

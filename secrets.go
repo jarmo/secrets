@@ -17,21 +17,25 @@ const VERSION = "0.0.1"
 func main() {
   switch parsedCommand := cli.Execute(VERSION, os.Args[1:]).(type) {
     case command.List:
-      secrets := vault.List(secrets(), parsedCommand.Filter)
-      for _, secret := range secrets {
+      secrets, _, _ := loadVault()
+      for _, secret := range vault.List(secrets, parsedCommand.Filter) {
         fmt.Println(secret)
       }
     case command.Add:
-      password := askPassword()
+      secrets, path, password := loadVault()
       secretName := parsedCommand.Name
       secretValue := input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", parsedCommand.Name))
-      fmt.Println("Added:", vault.Add(secretName, secretValue, path.Get(), password))
+      newSecret, newSecrets := vault.Add(secrets, secretName, secretValue)
+      storage.Write(password, path, newSecrets)
+      fmt.Println("Added:", newSecret)
     case command.Delete:
-      deletedSecret, err := vault.Delete(parsedCommand.Id, path.Get(), askPassword())
+      secrets, path, password := loadVault()
+      deletedSecret, newSecrets, err := vault.Delete(secrets, parsedCommand.Id)
       if err != nil {
         fmt.Println(err)
         os.Exit(1)
       } else {
+        storage.Write(password, path, newSecrets)
         fmt.Println("Deleted:", deletedSecret)
       }
     case command.Edit:
@@ -61,8 +65,10 @@ func main() {
   }
 }
 
-func secrets() []secret.Secret {
-  return storage.Read(askPassword(), path.Get())
+func loadVault() ([]secret.Secret, string, []byte) {
+  password := askPassword()
+  vaultPath := path.Get()
+  return storage.Read(password, vaultPath), vaultPath, password
 }
 
 func askPassword() []byte {

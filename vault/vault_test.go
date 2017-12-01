@@ -54,7 +54,8 @@ func TestAdd(t *testing.T) {
   vaultPath := prepareVault(t)
   defer os.Remove(vaultPath)
 
-  addedSecret := Add("secret-4-name", "secret-4-value", vaultPath, password())
+  addedSecret, newSecrets := Add(storage.Read(password(), vaultPath), "secret-4-name", "secret-4-value")
+  storage.Write(password(), vaultPath, newSecrets)
 
   filter := ""
   listedSecrets := List(storage.Read(password(), vaultPath), filter)
@@ -83,13 +84,14 @@ func TestDelete(t *testing.T) {
   defer os.Remove(vaultPath)
 
   id, _ := uuid.FromString("2b57a54a-c70b-4a81-87db-7839d16f0176")
-  if deletedSecret, err := Delete(id, vaultPath, password()); err != nil {
+  if deletedSecret, newSecrets, err := Delete(storage.Read(password(), vaultPath), id); err != nil {
     t.Fatal(err)
   } else {
     expectedDeletedSecret := secret.Secret{id, "secret-2-name", "secret-2-value"}
     if fmt.Sprintf("%v", expectedDeletedSecret) != fmt.Sprintf("%v", deletedSecret) {
       t.Fatal(fmt.Sprintf("Expected deleted secret to be %s, but got %s", expectedDeletedSecret, deletedSecret))
     }
+    storage.Write(password(), vaultPath, newSecrets)
   }
 
   filter := ""
@@ -114,10 +116,12 @@ func TestDelete_NonExistingId(t *testing.T) {
 
   id, _ := uuid.FromString("2b57a54a-0000-0000-87db-7839d16f0176")
   expectedError := "Secret by specified id not found!"
-  if deletedSecret, err := Delete(id, vaultPath, password()); err.Error() != expectedError {
+  if deletedSecret, newSecrets, err := Delete(storage.Read(password(), vaultPath), id); err.Error() != expectedError {
     t.Fatal("Expected to return an error %s, but got %s", expectedError, err.Error())
   } else if deletedSecret != nil {
     t.Fatal(fmt.Sprintf("Expected not to return any deleted secrets, but got: %v", deletedSecret))
+  } else {
+    storage.Write(password(), vaultPath, newSecrets)
   }
 
   filter := ""
