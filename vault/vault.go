@@ -4,7 +4,7 @@ import (
   "errors"
   "bytes"
   "github.com/jarmo/secrets/secret"
-  "github.com/jarmo/secrets/vault/storage"
+  "github.com/jarmo/secrets/storage"
   "github.com/jarmo/secrets/vault/add"
   "github.com/jarmo/secrets/vault/list"
   "github.com/jarmo/secrets/vault/delete"

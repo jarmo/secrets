@@ -7,7 +7,7 @@ import (
   "io/ioutil"
   "github.com/satori/go.uuid"
   "github.com/jarmo/secrets/secret"
-  "github.com/jarmo/secrets/vault/storage"
+  "github.com/jarmo/secrets/storage"
 )
 
 func TestList(t *testing.T) {

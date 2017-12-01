@@ -6,8 +6,8 @@ import (
   "github.com/jarmo/secrets/cli"
   "github.com/jarmo/secrets/cli/command"
   "github.com/jarmo/secrets/vault"
-  "github.com/jarmo/secrets/vault/storage"
-  "github.com/jarmo/secrets/vault/storage/path"
+  "github.com/jarmo/secrets/storage"
+  "github.com/jarmo/secrets/storage/path"
   "github.com/jarmo/secrets/secret"
   "github.com/jarmo/secrets/input"
 )
