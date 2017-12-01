@@ -42,13 +42,13 @@ func Edit(secrets []secret.Secret, id uuid.UUID, newName, newValue string) (*sec
 }
 
 func ChangePassword(storagePath string, currentPassword, newPassword, newPasswordConfirmation []byte) error {
-  secrets := storage.Read(currentPassword, storagePath)
+  secrets := storage.Read(storagePath, currentPassword)
 
   if !bytes.Equal(newPassword, newPasswordConfirmation) {
     return errors.New("Passwords do not match!")
   }
 
-  storage.Write(newPassword, storagePath, secrets)
+  storage.Write(storagePath, newPassword, secrets)
 
   return nil
 }

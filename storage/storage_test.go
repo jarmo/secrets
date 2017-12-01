@@ -19,7 +19,7 @@ func TestWrite(t *testing.T) {
   vaultPathStr := vaultPath.Name()
   defer os.Remove(vaultPathStr)
 
-  Write([]byte("secret-password"), vaultPathStr, secrets())
+  Write(vaultPathStr, []byte("secret-password"), secrets())
 
   fileInfo, err := os.Stat(vaultPathStr)
   if fileInfo.Mode() != 0600 {
@@ -40,7 +40,7 @@ func TestWrite(t *testing.T) {
 }
 
 func TestRead(t *testing.T) {
-  decryptedSecrets := Read([]byte("secret-password"), "storage_test_input.json")
+  decryptedSecrets := Read("storage_test_input.json", []byte("secret-password"))
 
   expectedSecrets := secrets()
   id1, _ := uuid.FromString("7922219a-126e-4555-bf4d-42a38f51f3d8")
@@ -54,7 +54,7 @@ func TestRead(t *testing.T) {
 }
 
 func TestRead_NoVault(t *testing.T) {
-  decryptedSecrets := Read([]byte("secret-password"), "non-existing-file")
+  decryptedSecrets := Read("non-existing-file", []byte("secret-password"))
 
   if len(decryptedSecrets) != 0 {
     t.Fatal(fmt.Sprintf("Expected to have 0 secrets, but got: %d", len(decryptedSecrets)))

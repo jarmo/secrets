@@ -26,7 +26,7 @@ func main() {
       secretName := parsedCommand.Name
       secretValue := input.AskMultiline(fmt.Sprintf("Enter value for '%s':\n", parsedCommand.Name))
       newSecret, newSecrets := vault.Add(secrets, secretName, secretValue)
-      storage.Write(password, path, newSecrets)
+      storage.Write(path, password, newSecrets)
       fmt.Println("Added:", newSecret)
     case command.Delete:
       secrets, path, password := loadVault()
@@ -35,7 +35,7 @@ func main() {
         fmt.Println(err)
         os.Exit(1)
       } else {
-        storage.Write(password, path, newSecrets)
+        storage.Write(path, password, newSecrets)
         fmt.Println("Deleted:", deletedSecret)
       }
     case command.Edit:
@@ -47,7 +47,7 @@ func main() {
         fmt.Println(err)
         os.Exit(1)
       } else {
-        storage.Write(password, path, newSecrets)
+        storage.Write(path, password, newSecrets)
         fmt.Println("Edited:", editedSecret)
       }
     case command.ChangePassword:
@@ -69,7 +69,7 @@ func main() {
 func loadVault() ([]secret.Secret, string, []byte) {
   password := askPassword()
   vaultPath := path.Get()
-  return storage.Read(password, vaultPath), vaultPath, password
+  return storage.Read(vaultPath, password), vaultPath, password
 }
 
 func askPassword() []byte {
