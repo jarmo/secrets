@@ -6,7 +6,9 @@ import (
   "github.com/jarmo/secrets/cli"
   "github.com/jarmo/secrets/cli/command"
   "github.com/jarmo/secrets/vault"
+  "github.com/jarmo/secrets/vault/storage"
   "github.com/jarmo/secrets/vault/storage/path"
+  "github.com/jarmo/secrets/secret"
   "github.com/jarmo/secrets/input"
 )
 
@@ -15,7 +17,7 @@ const VERSION = "0.0.1"
 func main() {
   switch parsedCommand := cli.Execute(VERSION, os.Args[1:]).(type) {
     case command.List:
-      secrets := vault.List(parsedCommand.Filter, path.Get(), askPassword())
+      secrets := vault.List(secrets(), parsedCommand.Filter)
       for _, secret := range secrets {
         fmt.Println(secret)
       }
@@ -57,6 +59,10 @@ func main() {
     default:
       fmt.Printf("Unhandled command: %T\n", parsedCommand)
   }
+}
+
+func secrets() []secret.Secret {
+  return storage.Read(askPassword(), path.Get())
 }
 
 func askPassword() []byte {

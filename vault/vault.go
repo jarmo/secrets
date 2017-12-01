@@ -12,8 +12,8 @@ import (
   "github.com/satori/go.uuid"
 )
 
-func List(filter, storagePath string, password []byte) []secret.Secret {
-  return list.Execute(storage.Read(password, storagePath), filter)
+func List(secrets []secret.Secret, filter string) []secret.Secret {
+  return list.Execute(secrets, filter)
 }
 
 func Add(name, value, storagePath string, password []byte) secret.Secret {

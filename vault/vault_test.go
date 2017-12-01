@@ -7,6 +7,7 @@ import (
   "io/ioutil"
   "github.com/satori/go.uuid"
   "github.com/jarmo/secrets/secret"
+  "github.com/jarmo/secrets/vault/storage"
 )
 
 func TestList(t *testing.T) {
@@ -14,7 +15,7 @@ func TestList(t *testing.T) {
   defer os.Remove(vaultPath)
 
   filter := ""
-  listedSecrets := List(filter, vaultPath, password())
+  listedSecrets := List(storage.Read(password(), vaultPath), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -37,7 +38,7 @@ func TestList_WithFilter(t *testing.T) {
   defer os.Remove(vaultPath)
 
   filter := "secret-2"
-  listedSecrets := List(filter, vaultPath, password())
+  listedSecrets := List(storage.Read(password(), vaultPath), filter)
 
   expectedListedSecrets := `[
 [2b57a54a-c70b-4a81-87db-7839d16f0176]
@@ -56,7 +57,7 @@ func TestAdd(t *testing.T) {
   addedSecret := Add("secret-4-name", "secret-4-value", vaultPath, password())
 
   filter := ""
-  listedSecrets := List(filter, vaultPath, password())
+  listedSecrets := List(storage.Read(password(), vaultPath), filter)
 
   expectedListedSecrets := fmt.Sprintf(`[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -92,7 +93,7 @@ func TestDelete(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(filter, vaultPath, password())
+  listedSecrets := List(storage.Read(password(), vaultPath), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -120,7 +121,7 @@ func TestDelete_NonExistingId(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(filter, vaultPath, password())
+  listedSecrets := List(storage.Read(password(), vaultPath), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -153,7 +154,7 @@ func TestEdit(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(filter, vaultPath, password())
+  listedSecrets := List(storage.Read(password(), vaultPath), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -184,7 +185,7 @@ func TestEdit_NonExistingId(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(filter, vaultPath, password())
+  listedSecrets := List(storage.Read(password(), vaultPath), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -214,7 +215,7 @@ func TestChangePassword(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(filter, vaultPath, newPassword)
+  listedSecrets := List(storage.Read(newPassword, vaultPath), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -245,7 +246,7 @@ func TestChangePassword_ConfirmationPasswordDoesNotMatch(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(filter, vaultPath, password())
+  listedSecrets := List(storage.Read(password(), vaultPath), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
