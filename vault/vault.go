@@ -31,17 +31,14 @@ func Delete(secrets []secret.Secret, id uuid.UUID) (*secret.Secret, []secret.Sec
   return &deletedSecret, newSecrets, nil
 }
 
-func Edit(id uuid.UUID, newName, newValue, storagePath string, password []byte) (*secret.Secret, error) {
-  existingSecrets := storage.Read(password, storagePath)
-  existingSecretIndex := findIndexById(existingSecrets, id)
+func Edit(secrets []secret.Secret, id uuid.UUID, newName, newValue string) (*secret.Secret, []secret.Secret, error) {
+  existingSecretIndex := findIndexById(secrets, id)
   if existingSecretIndex == -1 {
-    return nil, errors.New("Secret by specified id not found!")
+    return nil, secrets, errors.New("Secret by specified id not found!")
   }
 
-  editedSecret, newSecrets := edit.Execute(existingSecrets, existingSecretIndex, newName, newValue)
-  storage.Write(password, storagePath, newSecrets)
-
-  return &editedSecret, nil
+  editedSecret, newSecrets := edit.Execute(secrets, existingSecretIndex, newName, newValue)
+  return &editedSecret, newSecrets, nil
 }
 
 func ChangePassword(storagePath string, currentPassword, newPassword, newPasswordConfirmation []byte) error {

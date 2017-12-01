@@ -39,14 +39,15 @@ func main() {
         fmt.Println("Deleted:", deletedSecret)
       }
     case command.Edit:
-      password := askPassword()
+      secrets, path, password := loadVault()
       newName := input.Ask(fmt.Sprintf("Enter new name: "))
       newValue := input.AskMultiline("Enter new value:\n")
-      editedSecret, err := vault.Edit(parsedCommand.Id, newName, newValue, path.Get(), password)
+      editedSecret, newSecrets, err := vault.Edit(secrets, parsedCommand.Id, newName, newValue)
       if err != nil {
         fmt.Println(err)
         os.Exit(1)
       } else {
+        storage.Write(password, path, newSecrets)
         fmt.Println("Edited:", editedSecret)
       }
     case command.ChangePassword:

@@ -148,13 +148,15 @@ func TestEdit(t *testing.T) {
   defer os.Remove(vaultPath)
 
   id, _ := uuid.FromString("2b57a54a-c70b-4a81-87db-7839d16f0176")
-  if editedSecret, err := Edit(id, "secret-2-new-name", "secret-2-new-value", vaultPath, password()); err != nil {
+  if editedSecret, newSecrets, err := Edit(storage.Read(password(), vaultPath), id, "secret-2-new-name", "secret-2-new-value"); err != nil {
     t.Fatal(err)
   } else {
     expectedEditedSecret := secret.Secret{id, "secret-2-new-name", "secret-2-new-value"}
     if fmt.Sprintf("%v", expectedEditedSecret) != fmt.Sprintf("%v", editedSecret) {
       t.Fatal(fmt.Sprintf("Expected edited secret to be %s, but got %s", expectedEditedSecret, editedSecret))
     }
+
+    storage.Write(password(), vaultPath, newSecrets)
   }
 
   filter := ""
@@ -182,10 +184,12 @@ func TestEdit_NonExistingId(t *testing.T) {
 
   id, _ := uuid.FromString("2b57a54a-0000-0000-87db-7839d16f0176")
   expectedError := "Secret by specified id not found!"
-  if editedSecret, err := Edit(id, "secret-2-new-name", "secret-2-new-value", vaultPath, password()); err.Error() != expectedError {
+  if editedSecret, newSecrets, err := Edit(storage.Read(password(), vaultPath), id, "secret-2-new-name", "secret-2-new-value"); err.Error() != expectedError {
     t.Fatal("Expected to return an error %s, but got %s", expectedError, err.Error())
   } else if editedSecret != nil {
     t.Fatal(fmt.Sprintf("Expected not to return any edited secrets, but got: %v", editedSecret))
+  } else {
+    storage.Write(password(), vaultPath, newSecrets)
   }
 
   filter := ""
