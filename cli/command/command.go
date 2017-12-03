@@ -27,3 +27,7 @@ type Delete struct {
 type ChangePassword struct {
   VaultPath string
 }
+
+type Initialize struct {
+  VaultPath string
+}

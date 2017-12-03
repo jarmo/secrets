@@ -14,11 +14,7 @@ type config struct {
 }
 
 func Get() (string, error) {
-  currentUser, _ := user.Current()
-  currentUserHome := currentUser.HomeDir
-
-  configurationPath := filepath.Join(currentUserHome, "/.secrets.conf.json")
-  if configJSON, err := ioutil.ReadFile(configurationPath); os.IsNotExist(err) {
+  if configJSON, err := ioutil.ReadFile(configurationPath()); os.IsNotExist(err) {
     return "", errors.New("Vault not found! Create or specify one.")
   } else {
     var conf config
@@ -28,4 +24,22 @@ func Get() (string, error) {
       return "", err
     }
   }
+}
+
+func Store(vaultPath string) string {
+  configurationPath := configurationPath()
+
+  if configJSON, err := json.Marshal(config{vaultPath}); err != nil {
+    panic(err)
+  } else if err := ioutil.WriteFile(configurationPath, configJSON, 0600); err != nil {
+    panic(err)
+  }
+
+  return configurationPath
+}
+
+func configurationPath() string {
+  currentUser, _ := user.Current()
+  currentUserHome := currentUser.HomeDir
+  return filepath.Join(currentUserHome, "/.secrets.conf.json")
 }

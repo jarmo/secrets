@@ -61,8 +61,11 @@ func main() {
       } else {
         fmt.Println("Vault password successfully changed!")
       }
+    case command.Initialize:
+      configurationPath := path.Store(parsedCommand.VaultPath)
+      fmt.Println(fmt.Sprintf("Vault successfully configured at %s and is ready to store new secrets!", configurationPath))
     default:
-      fmt.Printf("Unhandled command: %T\n", parsedCommand)
+      fmt.Printf("Unhandled command: %T[%v]\n", parsedCommand, parsedCommand)
   }
 }
 
