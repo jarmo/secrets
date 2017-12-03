@@ -68,14 +68,27 @@ func main() {
 
 func loadVault(vaultPath string) ([]secret.Secret, string, []byte) {
   password := askPassword()
-  return storage.Read(vaultPath, password), vaultPath, password
+  secrets, err := storage.Read(vaultPath, password)
+
+  if err != nil {
+    fmt.Println(err.Error())
+    os.Exit(1)
+  }
+
+  return secrets, vaultPath, password
 }
 
 func vaultPath(customPath string) string {
   if customPath != "" {
     return customPath
   } else {
-    return path.Get()
+    vaultPath, err := path.Get()
+    if err != nil {
+      fmt.Println(err)
+      os.Exit(1)
+    }
+
+    return vaultPath
   }
 }
 

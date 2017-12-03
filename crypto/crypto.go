@@ -1,11 +1,10 @@
 package crypto
 
 import (
-  "fmt"
-  "os"
   "encoding/base64"
   "crypto/rand"
   "encoding/json"
+  "errors"
   "golang.org/x/crypto/scrypt"
   "golang.org/x/crypto/nacl/secretbox"
   "github.com/jarmo/secrets/secret"
@@ -31,7 +30,7 @@ func Encrypt(password []byte, secrets []secret.Secret) Encrypted {
   }
 }
 
-func Decrypt(password []byte, encryptedSecrets Encrypted) []secret.Secret {
+func Decrypt(password []byte, encryptedSecrets Encrypted) ([]secret.Secret, error) {
   salt, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Salt)
   secretKey := calculateSecretKey(password, []byte(salt))
   data, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Data)
@@ -41,13 +40,12 @@ func Decrypt(password []byte, encryptedSecrets Encrypted) []secret.Secret {
   var decryptedSecrets []secret.Secret
 
   if decryptedSecretsJSON, ok := secretbox.Open(nil, data, &nonce, &secretKey); !ok {
-    fmt.Println("Invalid vault password!")
-    os.Exit(1)
+    return make([]secret.Secret, 0), errors.New("Invalid vault password!")
   } else if err := json.Unmarshal(decryptedSecretsJSON, &decryptedSecrets); err != nil {
     panic(err)
   }
 
-  return decryptedSecrets
+  return decryptedSecrets, nil
 }
 
 func calculateSecretKey(password, salt []byte) [32]byte {

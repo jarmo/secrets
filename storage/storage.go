@@ -8,16 +8,20 @@ import(
   "github.com/jarmo/secrets/secret"
 )
 
-func Read(path string, password []byte) []secret.Secret {
+func Read(path string, password []byte) ([]secret.Secret, error) {
   if encryptedSecretsJSON, err := ioutil.ReadFile(path); os.IsNotExist(err) {
-    return make([]secret.Secret, 0)
+    return make([]secret.Secret, 0), nil
   } else {
     var encryptedSecrets crypto.Encrypted
     if err := json.Unmarshal(encryptedSecretsJSON, &encryptedSecrets); err != nil {
       panic(err)
     }
 
-    return crypto.Decrypt(password, encryptedSecrets)
+    if secrets, err := crypto.Decrypt(password, encryptedSecrets); err != nil {
+      return secrets, err
+    } else {
+      return secrets, nil
+    }
   }
 }
 

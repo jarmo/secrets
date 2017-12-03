@@ -15,7 +15,7 @@ func TestList(t *testing.T) {
   defer os.Remove(vaultPath)
 
   filter := ""
-  listedSecrets := List(storage.Read(vaultPath, password()), filter)
+  listedSecrets := List(secrets(t, vaultPath, password()), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -38,7 +38,7 @@ func TestList_WithFilter(t *testing.T) {
   defer os.Remove(vaultPath)
 
   filter := "secret-2"
-  listedSecrets := List(storage.Read(vaultPath, password()), filter)
+  listedSecrets := List(secrets(t, vaultPath, password()), filter)
 
   expectedListedSecrets := `[
 [2b57a54a-c70b-4a81-87db-7839d16f0176]
@@ -54,11 +54,11 @@ func TestAdd(t *testing.T) {
   vaultPath := prepareVault(t)
   defer os.Remove(vaultPath)
 
-  addedSecret, newSecrets := Add(storage.Read(vaultPath, password()), "secret-4-name", "secret-4-value")
+  addedSecret, newSecrets := Add(secrets(t, vaultPath, password()), "secret-4-name", "secret-4-value")
   storage.Write(vaultPath, password(), newSecrets)
 
   filter := ""
-  listedSecrets := List(storage.Read(vaultPath, password()), filter)
+  listedSecrets := List(secrets(t, vaultPath, password()), filter)
 
   expectedListedSecrets := fmt.Sprintf(`[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -84,7 +84,7 @@ func TestDelete(t *testing.T) {
   defer os.Remove(vaultPath)
 
   id, _ := uuid.FromString("2b57a54a-c70b-4a81-87db-7839d16f0176")
-  if deletedSecret, newSecrets, err := Delete(storage.Read(vaultPath, password()), id); err != nil {
+  if deletedSecret, newSecrets, err := Delete(secrets(t, vaultPath, password()), id); err != nil {
     t.Fatal(err)
   } else {
     expectedDeletedSecret := secret.Secret{id, "secret-2-name", "secret-2-value"}
@@ -95,7 +95,7 @@ func TestDelete(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(storage.Read(vaultPath, password()), filter)
+  listedSecrets := List(secrets(t, vaultPath, password()), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -116,7 +116,7 @@ func TestDelete_NonExistingId(t *testing.T) {
 
   id, _ := uuid.FromString("2b57a54a-0000-0000-87db-7839d16f0176")
   expectedError := "Secret by specified id not found!"
-  if deletedSecret, newSecrets, err := Delete(storage.Read(vaultPath, password()), id); err.Error() != expectedError {
+  if deletedSecret, newSecrets, err := Delete(secrets(t, vaultPath, password()), id); err.Error() != expectedError {
     t.Fatal("Expected to return an error %s, but got %s", expectedError, err.Error())
   } else if deletedSecret != nil {
     t.Fatal(fmt.Sprintf("Expected not to return any deleted secrets, but got: %v", deletedSecret))
@@ -125,7 +125,7 @@ func TestDelete_NonExistingId(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(storage.Read(vaultPath, password()), filter)
+  listedSecrets := List(secrets(t, vaultPath, password()), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -148,7 +148,7 @@ func TestEdit(t *testing.T) {
   defer os.Remove(vaultPath)
 
   id, _ := uuid.FromString("2b57a54a-c70b-4a81-87db-7839d16f0176")
-  if editedSecret, newSecrets, err := Edit(storage.Read(vaultPath, password()), id, "secret-2-new-name", "secret-2-new-value"); err != nil {
+  if editedSecret, newSecrets, err := Edit(secrets(t, vaultPath, password()), id, "secret-2-new-name", "secret-2-new-value"); err != nil {
     t.Fatal(err)
   } else {
     expectedEditedSecret := secret.Secret{id, "secret-2-new-name", "secret-2-new-value"}
@@ -160,7 +160,7 @@ func TestEdit(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(storage.Read(vaultPath, password()), filter)
+  listedSecrets := List(secrets(t, vaultPath, password()), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -184,7 +184,7 @@ func TestEdit_NonExistingId(t *testing.T) {
 
   id, _ := uuid.FromString("2b57a54a-0000-0000-87db-7839d16f0176")
   expectedError := "Secret by specified id not found!"
-  if editedSecret, newSecrets, err := Edit(storage.Read(vaultPath, password()), id, "secret-2-new-name", "secret-2-new-value"); err.Error() != expectedError {
+  if editedSecret, newSecrets, err := Edit(secrets(t, vaultPath, password()), id, "secret-2-new-name", "secret-2-new-value"); err.Error() != expectedError {
     t.Fatal("Expected to return an error %s, but got %s", expectedError, err.Error())
   } else if editedSecret != nil {
     t.Fatal(fmt.Sprintf("Expected not to return any edited secrets, but got: %v", editedSecret))
@@ -193,7 +193,7 @@ func TestEdit_NonExistingId(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(storage.Read(vaultPath, password()), filter)
+  listedSecrets := List(secrets(t, vaultPath, password()), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -223,7 +223,7 @@ func TestChangePassword(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(storage.Read(vaultPath, newPassword), filter)
+  listedSecrets := List(secrets(t, vaultPath, newPassword), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -254,7 +254,7 @@ func TestChangePassword_ConfirmationPasswordDoesNotMatch(t *testing.T) {
   }
 
   filter := ""
-  listedSecrets := List(storage.Read(vaultPath, password()), filter)
+  listedSecrets := List(secrets(t, vaultPath, password()), filter)
 
   expectedListedSecrets := `[
 [0da52a01-302d-4e2f-8200-a4d4226699af]
@@ -292,4 +292,13 @@ func prepareVault(t *testing.T) string {
 
 func password() []byte {
   return []byte("secret password")
+}
+
+func secrets(t *testing.T, vaultPath string, password []byte) []secret.Secret {
+  secrets, err := storage.Read(vaultPath, password)
+  if err != nil {
+    t.Fatal(err)
+  }
+
+  return secrets
 }

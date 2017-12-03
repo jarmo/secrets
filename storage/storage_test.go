@@ -40,7 +40,11 @@ func TestWrite(t *testing.T) {
 }
 
 func TestRead(t *testing.T) {
-  decryptedSecrets := Read("storage_test_input.json", []byte("secret-password"))
+  decryptedSecrets, err := Read("storage_test_input.json", []byte("secret-password"))
+
+  if err != nil {
+    t.Fatal(err)
+  }
 
   expectedSecrets := secrets()
   id1, _ := uuid.FromString("7922219a-126e-4555-bf4d-42a38f51f3d8")
@@ -53,8 +57,24 @@ func TestRead(t *testing.T) {
   }
 }
 
+func TestRead_WithInvalidPassword(t *testing.T) {
+  decryptedSecrets, err := Read("storage_test_input.json", []byte("wrong-password"))
+
+  if len(decryptedSecrets) != 0 {
+    t.Fatal(fmt.Sprintf("Expected no secrets, but got: %v", decryptedSecrets))
+  }
+
+  if err.Error() != "Invalid vault password!" {
+    t.Fatal(fmt.Sprintf("Expected invalid password error message but got: %v", err))
+  }
+}
+
 func TestRead_NoVault(t *testing.T) {
-  decryptedSecrets := Read("non-existing-file", []byte("secret-password"))
+  decryptedSecrets, err := Read("non-existing-file", []byte("secret-password"))
+
+  if err != nil {
+    t.Fatal(err)
+  }
 
   if len(decryptedSecrets) != 0 {
     t.Fatal(fmt.Sprintf("Expected to have 0 secrets, but got: %d", len(decryptedSecrets)))
