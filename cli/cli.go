@@ -12,34 +12,31 @@ func Execute(version string, args []string) interface{} {
 }
 
 func createUsage() string {
-  return `secrets COMMAND [OPTION] [VAULT_PATH]
+  return `secrets COMMAND [OPTIONS]
 
 Usage:
-  secrets --list [ID|NAME|VALUE] [VAULT_PATH]
-  secrets --add NAME [VAULT_PATH]
-  secrets --edit ID [VAULT_PATH]
-  secrets --delete ID [VAULT_PATH]
-  secrets --change-password [VAULT_PATH]
-
-Arguments:
-  VAULT_PATH           Optional parameter to specify vault absolute path.
-                       When not specified, path is asked from stdin or read from configuration file.
+  secrets --list [FILTER] [--vault-path=VAULT_PATH]
+  secrets --add NAME [--vault-path=VAULT_PATH]
+  secrets --edit ID [--vault-path=VAULT_PATH]
+  secrets --delete ID [--vault-path=VAULT_PATH]
+  secrets --change-password [--vault-path=VAULT_PATH]
 
 Options:
-  -l --list            List all secrets in the vault or filter by id, partial name or value.
-  -a --add             Add a new secret to the vault.
-  -e --edit            Edit secret in the vault by id.
-  -d --delete          Delete secret from the vault by id.
-  --change-password    Change the vault password.
-  -h --help            Show this screen.
-  -v --version         Show version.`
+  -l --list                List all secrets in the vault or FILTER by id, partial name or value.
+  -a --add                 Add a new secret to the vault.
+  -e --edit                Edit secret in the vault by id.
+  -d --delete              Delete secret from the vault by id.
+  --change-password        Change the vault password.
+  --vault-path VAULT_PATH  Optional VAULT_PATH. Defaults to the path in configuration.
+  -h --help                Show this screen.
+  -v --version             Show version.`
 }
 
 func createCommand(arguments map[string]interface {}) interface{} {
   vaultPath := vaultPath(arguments)
 
   if arguments["--list"].(bool) {
-    if filter, hasValue := arguments["ID"].(string); !hasValue {
+    if filter, hasValue := arguments["FILTER"].(string); !hasValue {
       return command.List{Filter: "", VaultPath: vaultPath}
     } else {
       return command.List{Filter: filter, VaultPath: vaultPath}
@@ -60,7 +57,7 @@ func createCommand(arguments map[string]interface {}) interface{} {
 }
 
 func vaultPath(arguments map[string]interface {}) string {
-  if vaultPath, hasValue := arguments["VAULT_PATH"].(string); hasValue {
+  if vaultPath, hasValue := arguments["--vault-path"].(string); hasValue {
     return vaultPath
   } else {
     return ""
