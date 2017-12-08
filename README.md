@@ -1,11 +1,27 @@
 # secrets
 [![CircleCI](https://circleci.com/gh/jarmo/secrets.svg?style=svg&circle-token=596c25b873ed12dd07c3df358afbf7e0c0cdf806)](https://circleci.com/gh/jarmo/secrets)
 
-**Secure** passwords manager written in Go. It aims to be *NYAPM* (Not Yet Another Password Manager), but tries to be different from others by using a different kind of easy to use secure cryptographic functions provided by [libsodium](https://download.libsodium.org/doc/) - you won't see any *NSA-approved* cryptography in here.
+**Secure** and simple passwords manager written in [Go](https://golang.org/). It aims to be *NYAPM* (Not Yet Another Password Manager), but tries to be different from others by following UNIX philosophy of doing only one thing and doing it well.
 
-Other big difference from other solutions is that **secrets** does only one thing and does it well - it stores *secrets* encrypted at rest. It does not sync between machines, it does generate new passwords, it does not auto-fill any passwords, etc.
+## Features
 
-Secrets can be anything from passwords, 2FA backup codes, secret diary entries to private keys!
+* stores your secrets as encrypted;
+* secrets can be anything from passwords, 2FA backup codes, diary entries to private keys;
+* uses a different kind of easy to use secure cryptography provided by [libsodium](https://download.libsodium.org/doc/);
+* supports multiple vaults with different passwords;
+* has [CLI](https://en.wikipedia.org/wiki/Command-line_interface) interface;
+* may be used as a Go library.
+
+### Anti-Features
+
+* does not sync your secrets to any cloud - gives you complete control over your secrets;
+* does not generate any passwords - use [proper tools](https://linux.die.net/man/1/pwgen) for that;
+* does not auto-fill any passwords anywhere - it's up to you how you will fill your passwords;
+* does not have any mobile apps nor browser plugins - less chance of your secrets to be leaked;
+
+## Is it secure?
+
+**Yes**, as long as its underlying cryptography is not broken. However, there is no 100% secure systems and there's no way to guarantee that. All in all, I'd say that using this is more secure than using any other SaaS as a password manager because everything is under your control.
 
 ## Installation
 
@@ -15,34 +31,43 @@ Download latest binary from [releases](https://github.com/jarmo/secrets/releases
 
 ## Usage
 
-**secrets** has a *CLI* (command-line interface), but can be also used as a Go library if there's any need.
-
 Here's an output from `secrets --help` command.
 
 ```
-$ secrets --help
-secrets
+$ secrets COMMAND [OPTIONS]
 
 Usage:
-  secrets --list [ID|NAME|VALUE]
-  secrets --add NAME
-  secrets --edit ID
-  secrets --delete ID
-  secrets --change-password
+  secrets --list [FILTER] [--vault-path=VAULT_PATH]
+  secrets --add NAME [--vault-path=VAULT_PATH]
+  secrets --edit ID [--vault-path=VAULT_PATH]
+  secrets --delete ID [--vault-path=VAULT_PATH]
+  secrets --change-password [--vault-path=VAULT_PATH]
+  secrets --init-vault --vault-path=VAULT_PATH
 
 Options:
-  -l --list            List all secrets in the vault or filter by id, partial name or value.
-  -a --add             Add a new secret to the vault.
-  -e --edit            Edit secret in the vault by id.
-  -d --delete          Delete secret from the vault by id.
-  --change-password    Change the vault password.
-  -h --help            Show this screen.
-  -v --version         Show version.
+  -l --list                List all secrets in the vault or filter by id, partial name or value.
+  -a --add                 Add a new secret to the vault.
+  -e --edit                Edit secret in the vault by id.
+  -d --delete              Delete secret from the vault by id.
+  --change-password        Change the vault password.
+  --vault-path VAULT_PATH  Optional vault path. Defaults to the path in configuration.
+  --init-vault             Initialize vault to specified path.
+  -h --help                Show this screen.
+  -v --version             Show version.
+```
+
+### Initializing Vault
+
+Vault needs to be initialized if there is going to be a default vault. Otherwise specifying `--vault-path` with any command is supported. Initializing vault just stores location to your vault into a configuration file:
+
+```
+$ secrets --init-vault --vault-path /home/user/.secrets.json
+Vault successfully configured at /home/user/.secrets.conf.json and is ready to store new secrets!
 ```
 
 ### Adding a New Secret
 
-Add your first secret will also create a vault:
+Add your first secret:
 
 ```
 $ secrets -a "my secret" 
@@ -107,14 +132,6 @@ different secret value
 yet another secret value line
 ```
 
-## Vault Location
-
-Vault will be created by default into your Dropbox folder if you have it installed as a **.secrets.json**. This acts as a possible backup/syncing solution when a need arises. You can however use a custom path by creating a configuration file similar to this:
-
-```
-echo '{"Path": "/home/foo/my-secrets.json"}' > ~/.secrets.conf.json
-```
-
 ## Development
 
 1. Install [dep](https://github.com/golang/dep) for dependency management.
@@ -131,4 +148,4 @@ make install
 
 ## Background Story
 
-I've used [LastPass](https://www.lastpass.com/) and [mitro](http://www.mitro.co/) in the past to store my secrets, but didn't feel too secure with either of them due to security vulnerabilities and/or one of them being shut down. I've got enough of switching between different managers and decided to write my own. I did write a version of **secrets** in Ruby a few years ago, but decided to give Go a try due to its portability features and here's the result. I've also decided to use a cryptographic library called libsodium.
+I've used [LastPass](https://www.lastpass.com/) and [mitro](http://www.mitro.co/) in the past to store my secrets, but didn't feel too secure with either of them due to security vulnerabilities and/or one of them being shut down. I've got enough of switching between different managers and decided to write my own. I did write a version of **secrets** in Ruby a few years ago, but decided to give Go a try due to its portability features and here's the result. I've also decided to use a cryptographic library called libsodium. I've done my best, but there's no guarantees that it's secure.
