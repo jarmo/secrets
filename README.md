@@ -5,23 +5,24 @@
 
 ## Features
 
-* stores your secrets as encrypted;
+* stores your secrets encrypted at rest;
 * secrets can be anything from passwords, 2FA backup codes, diary entries to private keys;
-* uses a different kind of easy to use secure cryptography provided by [libsodium](https://download.libsodium.org/doc/);
+* does not leak count nor nature of your secrets;
+* uses an alternative easy to use secure cryptography provided by [libsodium](https://download.libsodium.org/doc/);
 * supports multiple vaults with different passwords;
-* has [CLI](https://en.wikipedia.org/wiki/Command-line_interface) interface;
+* has [CLI](https://en.wikipedia.org/wiki/Command-line_interface) interface pre-built binaries for macOS, Linux and Windows, but can be compiled for other platforms too due to usage of underlying Go language;
 * may be used as a Go library.
 
 ### Anti-Features
 
-* does not sync your secrets to any cloud - gives you complete control over your secrets;
+* does not sync your secrets to any cloud - gives you complete control over them;
 * does not generate any passwords - use [proper tools](https://linux.die.net/man/1/pwgen) for that;
 * does not auto-fill any passwords anywhere - it's up to you how you will fill your passwords;
 * does not have any mobile apps nor browser plugins - less chance of your secrets to be leaked;
 
 ## Is it secure?
 
-**Yes**, as long as its underlying cryptography is not broken. However, there is no 100% secure systems and there's no way to guarantee that. All in all, I'd say that using this is more secure than using any other SaaS as a password manager because everything is under your control.
+**Yes**, as long as its underlying cryptography is not broken. However, there are no 100% secure systems and there's no way to guarantee that. All in all, I'd say that using this is more secure than using any other SaaS as a password manager because everything is under your control. The most secure system is not a software itself, but it's how and where you use it.
 
 ## Installation
 
