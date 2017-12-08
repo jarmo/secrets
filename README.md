@@ -10,7 +10,7 @@
 * does not leak count nor nature of your secrets;
 * uses an alternative easy to use secure cryptography provided by [libsodium](https://download.libsodium.org/doc/);
 * supports multiple vaults with different passwords;
-* has [CLI](https://en.wikipedia.org/wiki/Command-line_interface) interface pre-built binaries for macOS, Linux and Windows, but can be compiled for other platforms too due to usage of underlying Go language;
+* has [CLI](https://en.wikipedia.org/wiki/Command-line_interface) interface pre-built binaries for macOS, Linux and Windows, but can be compiled for many other platforms too due to usage of underlying Go language;
 * may be used as a Go library.
 
 ### Anti-Features
