@@ -26,7 +26,7 @@
 
 ## Installation
 
-Download latest binary from [releases](https://github.com/jarmo/secrets/releases) and add it to somewhere in your **PATH**. That's it.
+Download latest binary from [releases](https://github.com/jarmo/secrets/releases) extract it and add it to somewhere in your **PATH**. That's it.
 
 *Of course, you can compile your own version of binary to be 100% sure that it has not been tampered with.*
 
