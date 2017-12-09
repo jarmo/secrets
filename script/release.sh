@@ -8,9 +8,11 @@ fi
 git push
 
 VERSION=`grep "VERSION =" secrets.go | awk '{print $4}' | tr -d '"'`
-echo "Enter github password to release $VERSION: "
+echo "Enter changelog to release version $VERSION: "
+read CHANGELOG
+echo "Enter github password: "
 read -s PASSWORD
-RESPONSE=`http -ba jarmo:$PASSWORD POST "https://api.github.com/repos/jarmo/secrets/releases" tag_name="$VERSION" draft:=true name="secrets $VERSION"`
+RESPONSE=`http -ba jarmo:$PASSWORD POST "https://api.github.com/repos/jarmo/secrets/releases" tag_name="$VERSION" draft:=true name="secrets $VERSION" body="$CHANGELOG"`
 
 rm -rf dist
 mkdir -p dist
