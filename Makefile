@@ -22,4 +22,7 @@ test:
 install:
 	cp -Rf bin/ ${PREFIX}/bin
 
+release: all
+	script/release.sh
+
 .PHONY: all test clean linux darwin windows install
