@@ -27,7 +27,7 @@ for file in `ls -d dist/*`; do
   http -ba jarmo:$PASSWORD POST "https://uploads.github.com/repos/jarmo/secrets/releases/$RELEASE_ID/assets?name=`basename $file`" @$file > /dev/null
 done
 
-http -ba jarmo:$PASSWORD PATCH "https://api.github.com/repos/jarmo/secrets/releases/$RELEASE_ID" draft:=false > /dev/null
+RESPONSE=`http -ba jarmo:$PASSWORD PATCH "https://api.github.com/repos/jarmo/secrets/releases/$RELEASE_ID" draft:=false`
 
 echo "Release done:"
 echo $RESPONSE | jq -r .html_url
