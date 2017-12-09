@@ -1,5 +1,5 @@
 # secrets
-[![CircleCI](https://circleci.com/gh/jarmo/secrets.svg?style=svg&circle-token=596c25b873ed12dd07c3df358afbf7e0c0cdf806)](https://circleci.com/gh/jarmo/secrets)
+[![CircleCI](https://circleci.com/gh/jarmo/secrets.svg?style=svg)](https://circleci.com/gh/jarmo/secrets)
 
 **Secure** and simple passwords manager written in [Go](https://golang.org/). It aims to be *NYAPM* (Not Yet Another Password Manager), but tries to be different from others by following UNIX philosophy of doing only one thing and doing it well.
 
