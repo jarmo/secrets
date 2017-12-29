@@ -12,7 +12,7 @@ const version = "1.3.3.7"
 func TestExecute_ListWithoutFilter(t *testing.T) {
   filter := ""
 
-  switch parsedCommand := Execute(version, []string{"--list", filter}).(type) {
+  switch parsedCommand := Execute(version, []string{"list", filter}).(type) {
     case command.List:
       if parsedCommand.Filter != filter {
         t.Fatal(fmt.Sprintf("Expected filter to be '%v' but was: '%v'", filter, parsedCommand.Filter))
@@ -29,7 +29,7 @@ func TestExecute_ListWithoutFilterAndWithCustomVaultPath(t *testing.T) {
   filter := ""
   vaultPath := "/foo/bar/baz"
 
-  switch parsedCommand := Execute(version, []string{"--list", "--vault-path", vaultPath}).(type) {
+  switch parsedCommand := Execute(version, []string{"list", "--vault-path", vaultPath}).(type) {
     case command.List:
       if parsedCommand.Filter != filter {
         t.Fatal(fmt.Sprintf("Expected filter to be '%v' but was: '%v'", filter, parsedCommand.Filter))
@@ -45,7 +45,7 @@ func TestExecute_ListWithoutFilterAndWithCustomVaultPath(t *testing.T) {
 func TestExecute_ListWithFilter(t *testing.T) {
   filter := "custom-filter"
 
-  switch parsedCommand := Execute(version, []string{"--list", filter}).(type) {
+  switch parsedCommand := Execute(version, []string{"list", filter}).(type) {
     case command.List:
       if parsedCommand.Filter != filter {
         t.Fatal(fmt.Sprintf("Expected filter to be '%v', but was '%v'", filter, parsedCommand.Filter))
@@ -62,7 +62,7 @@ func TestExecute_ListWithFilterAndWithCustomVaultPath(t *testing.T) {
   filter := "custom-filter"
   vaultPath := "/foo/bar/baz"
 
-  switch parsedCommand := Execute(version, []string{"--list", filter, "--vault-path", vaultPath}).(type) {
+  switch parsedCommand := Execute(version, []string{"list", filter, "--vault-path", vaultPath}).(type) {
     case command.List:
       if parsedCommand.Filter != filter {
         t.Fatal(fmt.Sprintf("Expected filter to be '%v', but was '%v'", filter, parsedCommand.Filter))

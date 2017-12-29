@@ -15,7 +15,7 @@ func createUsage() string {
   return `secrets COMMAND [OPTIONS]
 
 Usage:
-  secrets --list [FILTER] [--vault-path=VAULT_PATH]
+  secrets list [FILTER] [--vault-path=VAULT_PATH]
   secrets --add NAME [--vault-path=VAULT_PATH]
   secrets --edit ID [--vault-path=VAULT_PATH]
   secrets --delete ID [--vault-path=VAULT_PATH]
@@ -23,7 +23,6 @@ Usage:
   secrets --init-vault --vault-path=VAULT_PATH
 
 Options:
-  -l --list                List all secrets in the vault or filter by id, partial name or value.
   -a --add                 Add a new secret to the vault.
   -e --edit                Edit secret in the vault by id.
   -d --delete              Delete secret from the vault by id.
@@ -37,7 +36,7 @@ Options:
 func createCommand(arguments map[string]interface {}) interface{} {
   vaultPath := vaultPath(arguments)
 
-  if arguments["--list"].(bool) {
+  if arguments["list"].(bool) {
     if filter, hasValue := arguments["FILTER"].(string); !hasValue {
       return command.List{Filter: "", VaultPath: vaultPath}
     } else {
