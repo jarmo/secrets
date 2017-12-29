@@ -78,7 +78,7 @@ func TestExecute_ListWithFilterAndWithCustomVaultPath(t *testing.T) {
 func TestExecute_Add(t *testing.T) {
   name := "custom-name"
 
-  switch parsedCommand := Execute(version, []string{"--add", name}).(type) {
+  switch parsedCommand := Execute(version, []string{"add", name}).(type) {
     case command.Add:
       if parsedCommand.Name != name {
         t.Fatal(fmt.Sprintf("Expected name to be '%v', but was '%v'", name, parsedCommand.Name))
@@ -95,7 +95,7 @@ func TestExecute_AddWithCustomVaultPath(t *testing.T) {
   name := "custom-name"
   vaultPath := "/foo/bar/baz"
 
-  switch parsedCommand := Execute(version, []string{"--add", name, "--vault-path", vaultPath}).(type) {
+  switch parsedCommand := Execute(version, []string{"add", name, "--vault-path", vaultPath}).(type) {
     case command.Add:
       if parsedCommand.Name != name {
         t.Fatal(fmt.Sprintf("Expected name to be '%v', but was '%v'", name, parsedCommand.Name))

@@ -16,14 +16,13 @@ func createUsage() string {
 
 Usage:
   secrets list [FILTER] [--vault-path=VAULT_PATH]
-  secrets --add NAME [--vault-path=VAULT_PATH]
+  secrets add NAME [--vault-path=VAULT_PATH]
   secrets --edit ID [--vault-path=VAULT_PATH]
   secrets --delete ID [--vault-path=VAULT_PATH]
   secrets --change-password [--vault-path=VAULT_PATH]
   secrets --init-vault --vault-path=VAULT_PATH
 
 Options:
-  -a --add                 Add a new secret to the vault.
   -e --edit                Edit secret in the vault by id.
   -d --delete              Delete secret from the vault by id.
   --change-password        Change the vault password.
@@ -42,7 +41,7 @@ func createCommand(arguments map[string]interface {}) interface{} {
     } else {
       return command.List{Filter: filter, VaultPath: vaultPath}
     }
-  } else if arguments["--add"].(bool) {
+  } else if arguments["add"].(bool) {
     return command.Add{Name: arguments["NAME"].(string), VaultPath: vaultPath}
   } else if arguments["--edit"].(bool) {
     id, _ := uuid.FromString(arguments["ID"].(string))
