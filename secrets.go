@@ -12,7 +12,7 @@ import (
   "github.com/jarmo/secrets/input"
 )
 
-const VERSION = "1.0.0"
+const VERSION = "2.0.0"
 
 func main() {
   switch parsedCommand := cli.Execute(VERSION, os.Args[1:]).(type) {
