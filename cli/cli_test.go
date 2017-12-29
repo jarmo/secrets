@@ -111,7 +111,7 @@ func TestExecute_AddWithCustomVaultPath(t *testing.T) {
 func TestExecute_Edit(t *testing.T) {
   id := uuid.NewV4()
 
-  switch parsedCommand := Execute(version, []string{"--edit", id.String()}).(type) {
+  switch parsedCommand := Execute(version, []string{"edit", id.String()}).(type) {
     case command.Edit:
       if parsedCommand.Id != id {
         t.Fatal(fmt.Sprintf("Expected id to be '%v', but was '%v'", id, parsedCommand.Id))
@@ -128,7 +128,7 @@ func TestExecute_EditWithCustomVaultPath(t *testing.T) {
   id := uuid.NewV4()
   vaultPath := "/foo/bar/baz"
 
-  switch parsedCommand := Execute(version, []string{"--edit", id.String(), "--vault-path", vaultPath}).(type) {
+  switch parsedCommand := Execute(version, []string{"edit", id.String(), "--vault-path", vaultPath}).(type) {
     case command.Edit:
       if parsedCommand.Id != id {
         t.Fatal(fmt.Sprintf("Expected id to be '%v', but was '%v'", id, parsedCommand.Id))
