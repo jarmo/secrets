@@ -15,17 +15,17 @@ func createUsage() string {
   return `secrets COMMAND [OPTIONS]
 
 Usage:
-  secrets list [FILTER] [--vault-path=VAULT_PATH]
-  secrets add NAME [--vault-path=VAULT_PATH]
-  secrets edit ID [--vault-path=VAULT_PATH]
-  secrets delete ID [--vault-path=VAULT_PATH]
-  secrets change-password [--vault-path=VAULT_PATH]
-  secrets initialize --vault-path=VAULT_PATH
+  secrets list [FILTER] [--path=VAULT_PATH]
+  secrets add NAME [--path=VAULT_PATH]
+  secrets edit ID [--path=VAULT_PATH]
+  secrets delete ID [--path=VAULT_PATH]
+  secrets change-password [--path=VAULT_PATH]
+  secrets initialize --path=VAULT_PATH
 
 Options:
-  --vault-path VAULT_PATH  Optional vault path. Defaults to the path in configuration.
-  -h --help                Show this screen.
-  -v --version             Show version.`
+  --path VAULT_PATH      Optional vault path. Defaults to the path in configuration.
+  -h --help              Show this screen.
+  -v --version           Show version.`
 }
 
 func createCommand(arguments map[string]interface {}) interface{} {
@@ -55,7 +55,7 @@ func createCommand(arguments map[string]interface {}) interface{} {
 }
 
 func vaultPath(arguments map[string]interface {}) string {
-  if vaultPath, hasValue := arguments["--vault-path"].(string); hasValue {
+  if vaultPath, hasValue := arguments["--path"].(string); hasValue {
     return vaultPath
   } else {
     return ""
