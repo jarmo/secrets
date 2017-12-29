@@ -19,11 +19,10 @@ Usage:
   secrets add NAME [--vault-path=VAULT_PATH]
   secrets edit ID [--vault-path=VAULT_PATH]
   secrets delete ID [--vault-path=VAULT_PATH]
-  secrets --change-password [--vault-path=VAULT_PATH]
+  secrets change-password [--vault-path=VAULT_PATH]
   secrets --init-vault --vault-path=VAULT_PATH
 
 Options:
-  --change-password        Change the vault password.
   --vault-path VAULT_PATH  Optional vault path. Defaults to the path in configuration.
   --init-vault             Initialize vault to specified path.
   -h --help                Show this screen.
@@ -47,7 +46,7 @@ func createCommand(arguments map[string]interface {}) interface{} {
   } else if arguments["delete"].(bool) {
     id, _ := uuid.FromString(arguments["ID"].(string))
     return command.Delete{Id: id, VaultPath: vaultPath}
-  } else if arguments["--change-password"].(bool) {
+  } else if arguments["change-password"].(bool) {
     return command.ChangePassword{VaultPath: vaultPath}
   } else if arguments["--init-vault"].(bool) {
     return command.Initialize{VaultPath: vaultPath}

@@ -175,7 +175,7 @@ func TestExecute_DeleteWithCustomVaultPath(t *testing.T) {
 }
 
 func TestExecute_ChangePassword(t *testing.T) {
-  switch parsedCommand := Execute(version, []string{"--change-password"}).(type) {
+  switch parsedCommand := Execute(version, []string{"change-password"}).(type) {
     case command.ChangePassword:
       if parsedCommand.VaultPath != "" {
         t.Fatal(fmt.Sprintf("Expected VaultPath to be empty but was: '%v'", parsedCommand.VaultPath))
@@ -188,7 +188,7 @@ func TestExecute_ChangePassword(t *testing.T) {
 func TestExecute_ChangePasswordWithCustomVaultPath(t *testing.T) {
   vaultPath := "/foo/bar/baz"
 
-  switch parsedCommand := Execute(version, []string{"--change-password", "--vault-path", vaultPath}).(type) {
+  switch parsedCommand := Execute(version, []string{"change-password", "--vault-path", vaultPath}).(type) {
     case command.ChangePassword:
       if parsedCommand.VaultPath != vaultPath {
         t.Fatal(fmt.Sprintf("Expected VaultPath to be '%v' but was: '%v'", vaultPath, parsedCommand.VaultPath))
