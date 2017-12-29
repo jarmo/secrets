@@ -63,7 +63,7 @@ func main() {
       }
     case command.Initialize:
       configurationPath := path.Store(parsedCommand.VaultPath)
-      fmt.Println(fmt.Sprintf("Vault successfully configured at %s and is ready to store new secrets!", configurationPath))
+      fmt.Println(fmt.Sprintf("Vault successfully configured at %s and is ready to store your secrets!", configurationPath))
     default:
       fmt.Printf("Unhandled command: %T[%v]\n", parsedCommand, parsedCommand)
   }
