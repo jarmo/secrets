@@ -46,9 +46,9 @@ Usage:
   secrets initialize --path=VAULT_PATH
 
 Options:
-  --path VAULT_PATH  Optional vault path. Defaults to the path in configuration.
-  -h --help                Show this screen.
-  -v --version             Show version.
+  --path VAULT_PATH      Optional vault path. Defaults to the path in configuration.
+  -h --help              Show this screen.
+  -v --version           Show version.
 ```
 
 ### Initializing Vault
