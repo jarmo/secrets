@@ -201,7 +201,7 @@ func TestExecute_ChangePasswordWithCustomVaultPath(t *testing.T) {
 func TestExecute_Initialize(t *testing.T) {
   vaultPath := "/foo/bar/baz"
 
-  switch parsedCommand := Execute(version, []string{"init-vault", "--vault-path", vaultPath}).(type) {
+  switch parsedCommand := Execute(version, []string{"initialize", "--vault-path", vaultPath}).(type) {
     case command.Initialize:
       if parsedCommand.VaultPath != "/foo/bar/baz" {
         t.Fatal("Expected vault path to be '%v', but was '%v'", vaultPath, parsedCommand.VaultPath)
