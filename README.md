@@ -29,7 +29,7 @@
 
 Download latest binary from [releases](https://github.com/jarmo/secrets/releases) extract it and add it to somewhere in your **PATH**. That's it.
 
-*Of course, you can compile your own version of binary to be 100% sure that it has not been tampered with.*
+*Of course, you're free to compile your own version of binary to be 100% sure that it has not been tampered with, since this is an open-source project after all.*
 
 ## Usage
 
