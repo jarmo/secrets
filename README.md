@@ -16,8 +16,9 @@
 ### Anti-Features
 
 * does not sync your secrets to any cloud - you have complete control over them;
+* does not allow to recover any passwords when vault password has been forgotten - there's no built-in backdoor;
 * does not generate any passwords - use [proper tools](https://linux.die.net/man/1/pwgen) for that;
-* does not auto-fill any passwords anywhere - it's up to you how you will fill your passwords;
+* does not auto-fill any passwords anywhere (you [don't want](https://freedom-to-tinker.com/2017/12/27/no-boundaries-for-user-identities-web-trackers-exploit-browser-login-managers/) that anyway) - it's up to you how you will fill your passwords;
 * does not have any mobile apps nor browser plugins - less chance of your secrets to be leaked;
 
 ## Is it secure?
