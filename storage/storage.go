@@ -28,7 +28,7 @@ func Read(path string, password []byte) ([]secret.Secret, error) {
 func Write(path string, password []byte, decryptedSecrets []secret.Secret) {
   encryptedSecrets := crypto.Encrypt(password, decryptedSecrets)
 
-  if encryptedSecretsJSON, err := json.Marshal(encryptedSecrets); err != nil {
+  if encryptedSecretsJSON, err := json.MarshalIndent(encryptedSecrets, "", "  "); err != nil {
     panic(err)
   } else if err := ioutil.WriteFile(path, encryptedSecretsJSON, 0600); err != nil {
     panic(err)

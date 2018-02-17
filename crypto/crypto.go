@@ -14,6 +14,9 @@ type Encrypted struct {
   Data string
   Nonce string
   Salt string
+  N int
+  R int
+  P int
 }
 
 func Encrypt(password []byte, secrets []secret.Secret) Encrypted {
@@ -21,18 +24,21 @@ func Encrypt(password []byte, secrets []secret.Secret) Encrypted {
     panic(err)
   } else {
     salt := generateRandomBytes(32)
-    secretKey := calculateSecretKey(password, salt)
+    N := 32768
+    r := 8
+    p := 2
+    secretKey := calculateSecretKey(password, salt, N, r, p)
     var nonce [24]byte
     copy(nonce[:], generateRandomBytes(24))
 
     data := secretbox.Seal(nil, encryptedSecretJSON, &nonce, &secretKey)
-    return Encrypted{Data: base64.StdEncoding.EncodeToString(data), Nonce: base64.StdEncoding.EncodeToString(nonce[:]), Salt: base64.StdEncoding.EncodeToString(salt)}
+    return Encrypted{Data: base64.StdEncoding.EncodeToString(data), Nonce: base64.StdEncoding.EncodeToString(nonce[:]), Salt: base64.StdEncoding.EncodeToString(salt), N: N, R: r, P: p}
   }
 }
 
 func Decrypt(password []byte, encryptedSecrets Encrypted) ([]secret.Secret, error) {
   salt, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Salt)
-  secretKey := calculateSecretKey(password, []byte(salt))
+  secretKey := calculateSecretKey(password, []byte(salt), encryptedSecrets.N, encryptedSecrets.R, encryptedSecrets.P)
   data, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Data)
   nonceBytes, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Nonce)
   var nonce [24]byte
@@ -48,10 +54,7 @@ func Decrypt(password []byte, encryptedSecrets Encrypted) ([]secret.Secret, erro
   return decryptedSecrets, nil
 }
 
-func calculateSecretKey(password, salt []byte) [32]byte {
-  N := 16384
-  r := 8
-  p := 2
+func calculateSecretKey(password, salt []byte, N, r, p int) [32]byte {
   keyLength := 32
 
   secretKeyBytes, err := scrypt.Key(password, salt, N, r, p, keyLength)
