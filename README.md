@@ -50,7 +50,8 @@ Options:
   --alias VAULT_ALIAS    Optional vault alias.
   --path VAULT_PATH      Optional vault path. Defaults to the path in configuration.
   -h --help              Show this screen.
-  -v --version           Show version.```
+  -v --version           Show version.
+```
 
 ### Initializing Vault
 
