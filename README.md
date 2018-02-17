@@ -39,25 +39,25 @@ Here's an output from `secrets --help` command.
 $ secrets COMMAND [OPTIONS]
 
 Usage:
-  secrets list [FILTER] [--path=VAULT_PATH]
-  secrets add NAME [--path=VAULT_PATH]
-  secrets edit ID [--path=VAULT_PATH]
-  secrets delete ID [--path=VAULT_PATH]
-  secrets change-password [--path=VAULT_PATH]
-  secrets initialize --path=VAULT_PATH
+  secrets list [FILTER] [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets add NAME [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets edit ID [--alias=VAULT_ALIAS | --path=VAULT_PATH]
+  secrets delete ID [--alias=VAULT_PATH | --path=VAULT_PATH]
+  secrets change-password [--alias=VAULT_PATH | --path=VAULT_PATH]
+  secrets initialize --path=VAULT_PATH --alias=VAULT_ALIAS
 
 Options:
+  --alias VAULT_ALIAS    Optional vault alias.
   --path VAULT_PATH      Optional vault path. Defaults to the path in configuration.
   -h --help              Show this screen.
-  -v --version           Show version.
-```
+  -v --version           Show version.```
 
 ### Initializing Vault
 
-Vault needs to be initialized if there is going to be a default vault. Otherwise specifying `--path` with any command is supported. Initializing vault just stores location to your vault into a configuration file:
+Vault needs to be initialized if there is going to be a default vault. Otherwise specifying `--path` or `--alias` with any command is supported. Initializing vault just stores location and alias to your vault into a configuration file:
 
 ```
-$ secrets initialize --path /home/user/.secrets.json
+$ secrets initialize --path /home/user/.secrets.json --alias main
 Vault successfully configured at /home/user/.secrets.conf.json and is ready to store your secrets!
 ```
 
@@ -127,6 +127,11 @@ different secret name
 different secret value
 yet another secret value line
 ```
+
+## Using multiple vaults
+
+Just append `--alias` after any command to operate against selected vault.
+When `--alias` is not specified a first vault existing in configuration file will be used.
 
 ## Development
 
