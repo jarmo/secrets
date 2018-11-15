@@ -3,7 +3,6 @@ package input
 import (
   "testing"
   "strings"
-  "fmt"
 )
 
 func TestReplaceUnprintableCharacters(t *testing.T) {
@@ -14,6 +13,6 @@ func TestReplaceUnprintableCharacters(t *testing.T) {
   result := replaceUnprintableCharacters(strings.Join(input, ""))
 
   if result != expectedInput {
-    t.Fatal(fmt.Sprintf("Expected result to be '%v', but got '%v'", []byte(expectedInput), []byte(result)))
+    t.Fatalf("Expected result to be '%v', but got '%v'", []byte(expectedInput), []byte(result))
   }
 }

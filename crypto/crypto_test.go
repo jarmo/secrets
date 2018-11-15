@@ -18,7 +18,7 @@ func TestEncryption(t *testing.T) {
   }
 
   if fmt.Sprintf("%v", decryptedSecrets) != fmt.Sprintf("%v", secrets) {
-    t.Fatal(fmt.Sprintf("Expected decrypted secrets to be '%s', but got '%s'", secrets, decryptedSecrets))
+    t.Fatalf("Expected decrypted secrets to be '%s', but got '%s'", secrets, decryptedSecrets)
   }
 }
 
@@ -30,10 +30,10 @@ func TestDecryption_WithInvalidPassword(t *testing.T) {
   decryptedSecrets, err := Decrypt([]byte("wrong-password"), encryptedSecrets)
 
   if len(decryptedSecrets) != 0 {
-    t.Fatal(fmt.Sprintf("Expected no secrets, but got: %v", decryptedSecrets))
+    t.Fatalf("Expected no secrets, but got: %v", decryptedSecrets)
   }
 
   if err.Error() != "Invalid vault password!" {
-    t.Fatal(fmt.Sprintf("Expected invalid password error message but got: %v", err))
+    t.Fatalf("Expected invalid password error message but got: %v", err)
   }
 }
