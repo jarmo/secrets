@@ -117,7 +117,7 @@ func TestDelete_NonExistingId(t *testing.T) {
   id, _ := uuid.FromString("2b57a54a-0000-0000-87db-7839d16f0176")
   expectedError := "Secret by specified id not found!"
   if deletedSecret, newSecrets, err := Delete(secrets(t, vaultPath, password()), id); err.Error() != expectedError {
-    t.Fatal("Expected to return an error %s, but got %s", expectedError, err.Error())
+    t.Fatalf("Expected to return an error %s, but got %s", expectedError, err.Error())
   } else if deletedSecret != nil {
     t.Fatal(fmt.Sprintf("Expected not to return any deleted secrets, but got: %v", deletedSecret))
   } else {
@@ -185,7 +185,7 @@ func TestEdit_NonExistingId(t *testing.T) {
   id, _ := uuid.FromString("2b57a54a-0000-0000-87db-7839d16f0176")
   expectedError := "Secret by specified id not found!"
   if editedSecret, newSecrets, err := Edit(secrets(t, vaultPath, password()), id, "secret-2-new-name", "secret-2-new-value"); err.Error() != expectedError {
-    t.Fatal("Expected to return an error %s, but got %s", expectedError, err.Error())
+    t.Fatalf("Expected to return an error %s, but got %s", expectedError, err.Error())
   } else if editedSecret != nil {
     t.Fatal(fmt.Sprintf("Expected not to return any edited secrets, but got: %v", editedSecret))
   } else {
@@ -250,7 +250,7 @@ func TestChangePassword_ConfirmationPasswordDoesNotMatch(t *testing.T) {
 
   expectedError := "Passwords do not match!"
   if err := ChangePassword(vaultPath, password(), newPassword, newPasswordConfirmation); err.Error() != expectedError {
-    t.Fatal("Expected to return an error %s, but got %s", expectedError, err.Error())
+    t.Fatalf("Expected to return an error %s, but got %s", expectedError, err.Error())
   }
 
   filter := ""

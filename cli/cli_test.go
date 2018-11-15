@@ -357,7 +357,7 @@ func TestExecute_Initialize(t *testing.T) {
   switch parsedCommand := Execute(version, []string{"initialize", "--path", vaultPath, "--alias", vaultAlias}).(type) {
     case command.Initialize:
       if parsedCommand.VaultPath != vaultPath {
-        t.Fatal("Expected vault path to be '%v', but was '%v'", vaultPath, parsedCommand.VaultPath)
+        t.Fatalf("Expected vault path to be '%v', but was '%v'", vaultPath, parsedCommand.VaultPath)
       }
       if parsedCommand.VaultAlias != vaultAlias {
         t.Fatal(fmt.Sprintf("Expected VaultAlias to be '%v' but was: '%v'", vaultAlias, parsedCommand.VaultAlias))
