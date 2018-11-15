@@ -2,32 +2,56 @@
 
 
 [[projects]]
+  digest = "1:d741c40674d5d73ae7bfad6a4b5c920bcc2492ce776ea606d83c91a05a093e0a"
   name = "github.com/docopt/docopt-go"
   packages = ["."]
+  pruneopts = ""
   revision = "784ddc588536785e7299f7272f39101f7faccc3f"
   version = "0.6.2"
 
 [[projects]]
+  digest = "1:6b55df4b0517a459af9d3879c99330af4367adcf45f3d0d37ded80a6272ae057"
   name = "github.com/satori/go.uuid"
   packages = ["."]
+  pruneopts = ""
   revision = "879c5887cd475cd7864858769793b2ceb0d44feb"
   version = "v1.1.0"
 
 [[projects]]
   branch = "master"
+  digest = "1:f6a006d27619a4d93bf9b66fe1999b8c8d1fa62bdc63af14f10fbe6fcaa2aa1a"
   name = "golang.org/x/crypto"
-  packages = ["nacl/secretbox","pbkdf2","poly1305","salsa20/salsa","scrypt","ssh/terminal"]
+  packages = [
+    "nacl/secretbox",
+    "pbkdf2",
+    "poly1305",
+    "salsa20/salsa",
+    "scrypt",
+    "ssh/terminal",
+  ]
+  pruneopts = ""
   revision = "9f005a07e0d31d45e6656d241bb5c0f2efd4bc94"
 
 [[projects]]
   branch = "master"
+  digest = "1:e35048b1b0e5f27fb179be17cf5d95f497474969b455e105e570aeaf3eb1556e"
   name = "golang.org/x/sys"
-  packages = ["unix","windows"]
+  packages = [
+    "unix",
+    "windows",
+  ]
+  pruneopts = ""
   revision = "0dd5e194bbf5eb84a39666eb4c98a4d007e4203a"
 
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "f662fb99f2895ab118a5f1890b87f5a0a202c9b159b836fb7f6d67bd267b05f7"
+  input-imports = [
+    "github.com/docopt/docopt-go",
+    "github.com/satori/go.uuid",
+    "golang.org/x/crypto/nacl/secretbox",
+    "golang.org/x/crypto/scrypt",
+    "golang.org/x/crypto/ssh/terminal",
+  ]
   solver-name = "gps-cdcl"
   solver-version = 1
