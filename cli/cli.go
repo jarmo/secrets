@@ -1,12 +1,12 @@
 package cli
 
 import (
-  "github.com/jarmo/secrets/cli/command"
   "github.com/docopt/docopt-go"
   "github.com/satori/go.uuid"
+  "github.com/jarmo/secrets/cli/command"
 )
 
-func Execute(version string, args []string) interface{} {
+func Command(version string, args []string) command.Executable {
   arguments, _ := docopt.Parse(createUsage(), args, true, version, false)
   return createCommand(arguments)
 }
@@ -29,7 +29,7 @@ Options:
   -v --version           Show version.`
 }
 
-func createCommand(arguments map[string]interface {}) interface{} {
+func createCommand(arguments map[string]interface {}) command.Executable {
   vaultAlias := vaultAlias(arguments)
   vaultPath := vaultPath(arguments)
 

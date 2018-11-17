@@ -38,6 +38,10 @@ func AskPassword(message string) []byte {
   return password
 }
 
+func AskVaultPassword() []byte {
+  return AskPassword("Enter vault password: ")
+}
+
 func replaceUnprintableCharacters(s string) string {
   ctrlD, ctrlX, ctrlZ := "\x04", "\x18", "\x1A"
 
