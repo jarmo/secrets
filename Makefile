@@ -17,7 +17,7 @@ windows:
 	GOOS=windows GOARCH=${GOARCH} go build -o bin/windows_${GOARCH}/${BINARY}.exe
 
 test:
-	go test -v ./...
+	script/run_tests.sh
 
 install:
 	cp -Rf bin/ ${PREFIX}/bin

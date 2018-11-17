@@ -7,6 +7,7 @@ import (
   "encoding/json"
   "errors"
   "golang.org/x/crypto/scrypt"
+  "golang.org/x/crypto/argon2"
   "golang.org/x/crypto/nacl/secretbox"
   "github.com/jarmo/secrets/secret"
 )
@@ -15,6 +16,12 @@ type scryptParams struct {
   N int
   R int
   P int
+}
+
+type argon2idParams struct {
+  Time int
+  Memory int
+  Threads int
 }
 
 type Encrypted struct {
@@ -29,15 +36,15 @@ func Encrypt(password []byte, secrets []secret.Secret) Encrypted {
     panic(err)
   } else {
     salt := generateRandomBytes(32)
-    N := 32768
-    r := 8
-    p := 2
-    secretKey := calculateScryptSecretKey(password, salt, scryptParams{N: N, R: r, P: p})
+    time := 1
+    memory := 64*1024
+    threads := 4
+    secretKey := argon2idSecretKey(password, salt, argon2idParams{Time: 1, Memory: 64*1024, Threads: 4})
     var nonce [24]byte
     copy(nonce[:], generateRandomBytes(24))
 
     data := secretbox.Seal(nil, encryptedSecretJSON, &nonce, &secretKey)
-    params := map[string]int{"N": N, "R": r, "P": p}
+    params := map[string]int{"Time": time, "Memory": memory, "Threads": threads}
     return Encrypted{
       Data: base64.StdEncoding.EncodeToString(data),
       Nonce: base64.StdEncoding.EncodeToString(nonce[:]),
@@ -49,12 +56,7 @@ func Encrypt(password []byte, secrets []secret.Secret) Encrypted {
 
 func Decrypt(password []byte, encryptedSecrets Encrypted) ([]secret.Secret, error) {
   salt, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Salt)
-  params := encryptedSecrets.Params
-  secretKey := calculateScryptSecretKey(
-    password,
-    []byte(salt),
-    scryptParams{N: params["N"], R: params["R"], P: params["p"]},
-  )
+  secretKey := secretKey(password, salt, encryptedSecrets.Params)
   data, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Data)
   nonceBytes, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Nonce)
   var nonce [24]byte
@@ -70,7 +72,23 @@ func Decrypt(password []byte, encryptedSecrets Encrypted) ([]secret.Secret, erro
   return decryptedSecrets, nil
 }
 
-func calculateScryptSecretKey(password, salt []byte, params scryptParams) [32]byte {
+func secretKey(password, salt []byte, params map[string]int) [32]byte {
+  if _, hasValue := params["Time"]; hasValue {
+    return argon2idSecretKey(
+      password,
+      []byte(salt),
+      argon2idParams{Time: params["Time"], Memory: params["Memory"], Threads: params["Threads"]},
+    )
+  } else {
+    return scryptSecretKey(
+      password,
+      []byte(salt),
+      scryptParams{N: params["N"], R: params["R"], P: params["p"]},
+    )
+  }
+}
+
+func scryptSecretKey(password, salt []byte, params scryptParams) [32]byte {
   keyLength := 32
 
   secretKeyBytes, err := scrypt.Key(
@@ -85,6 +103,24 @@ func calculateScryptSecretKey(password, salt []byte, params scryptParams) [32]by
   if err != nil {
     panic(err)
   }
+
+  var secretKey [32]byte
+  copy(secretKey[:], secretKeyBytes)
+
+  return secretKey
+}
+
+func argon2idSecretKey(password, salt []byte, params argon2idParams) [32]byte {
+  keyLength := 32
+
+  secretKeyBytes := argon2.IDKey(
+    password,
+    salt,
+    uint32(params.Time),
+    uint32(params.Memory),
+    uint8(params.Threads),
+    uint32(keyLength),
+  )
 
   var secretKey [32]byte
   copy(secretKey[:], secretKeyBytes)

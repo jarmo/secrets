@@ -22,6 +22,8 @@
   digest = "1:f7be435e0ca22e2cd62b2d2542081a231685837170a87a3662abb7cdf9f3f1cd"
   name = "golang.org/x/crypto"
   packages = [
+    "argon2",
+    "blake2b",
     "internal/subtle",
     "nacl/secretbox",
     "pbkdf2",
@@ -38,6 +40,7 @@
   digest = "1:3f5c191d90f1cf365ff1f88e4b08eb766ee6ade1cb2e4efd7c316cf7e015ac17"
   name = "golang.org/x/sys"
   packages = [
+    "cpu",
     "unix",
     "windows",
   ]
@@ -50,6 +53,7 @@
   input-imports = [
     "github.com/docopt/docopt-go",
     "github.com/satori/go.uuid",
+    "golang.org/x/crypto/argon2",
     "golang.org/x/crypto/nacl/secretbox",
     "golang.org/x/crypto/scrypt",
     "golang.org/x/crypto/ssh/terminal",
