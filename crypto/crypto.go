@@ -21,7 +21,7 @@ type Encrypted struct {
   Data string
   Nonce string
   Salt string
-  Params scryptParams
+  Params map[string]int
 }
 
 func Encrypt(password []byte, secrets []secret.Secret) Encrypted {
@@ -32,19 +32,29 @@ func Encrypt(password []byte, secrets []secret.Secret) Encrypted {
     N := 32768
     r := 8
     p := 2
-    secretKey := calculateSecretKey(password, salt, scryptParams{N, r, p})
+    secretKey := calculateScryptSecretKey(password, salt, scryptParams{N: N, R: r, P: p})
     var nonce [24]byte
     copy(nonce[:], generateRandomBytes(24))
 
     data := secretbox.Seal(nil, encryptedSecretJSON, &nonce, &secretKey)
-    params := scryptParams{N: N, R: r, P: p}
-    return Encrypted{Data: base64.StdEncoding.EncodeToString(data), Nonce: base64.StdEncoding.EncodeToString(nonce[:]), Salt: base64.StdEncoding.EncodeToString(salt), Params: params}
+    params := map[string]int{"N": N, "R": r, "P": p}
+    return Encrypted{
+      Data: base64.StdEncoding.EncodeToString(data),
+      Nonce: base64.StdEncoding.EncodeToString(nonce[:]),
+      Salt: base64.StdEncoding.EncodeToString(salt),
+      Params: params,
+    }
   }
 }
 
 func Decrypt(password []byte, encryptedSecrets Encrypted) ([]secret.Secret, error) {
   salt, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Salt)
-  secretKey := calculateSecretKey(password, []byte(salt), encryptedSecrets.Params)
+  params := encryptedSecrets.Params
+  secretKey := calculateScryptSecretKey(
+    password,
+    []byte(salt),
+    scryptParams{N: params["N"], R: params["R"], P: params["p"]},
+  )
   data, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Data)
   nonceBytes, _ := base64.StdEncoding.DecodeString(encryptedSecrets.Nonce)
   var nonce [24]byte
@@ -60,10 +70,18 @@ func Decrypt(password []byte, encryptedSecrets Encrypted) ([]secret.Secret, erro
   return decryptedSecrets, nil
 }
 
-func calculateSecretKey(password, salt []byte, params scryptParams) [32]byte {
+func calculateScryptSecretKey(password, salt []byte, params scryptParams) [32]byte {
   keyLength := 32
 
-  secretKeyBytes, err := scrypt.Key(password, salt, int(math.Max(float64(params.N), 16384)), int(math.Max(float64(params.R), 8)), int(math.Max(float64(params.P), 2)), keyLength)
+  secretKeyBytes, err := scrypt.Key(
+    password,
+    salt,
+    int(math.Max(float64(params.N), 16384)),
+    int(math.Max(float64(params.R), 8)),
+    int(math.Max(float64(params.P), 2)),
+    keyLength,
+  )
+
   if err != nil {
     panic(err)
   }
