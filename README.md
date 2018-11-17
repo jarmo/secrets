@@ -8,7 +8,7 @@
 * stores your secrets encrypted at rest;
 * secrets can be anything from passwords, 2FA backup codes, diary entries to private keys;
 * does not leak count nor nature of your secrets;
-* uses an alternative easy to use secure cryptography provided by [libsodium](https://download.libsodium.org/doc/);
+* uses an alternative easy to use secure cryptography provided by [libsodium](https://download.libsodium.org/doc/) and [Argon2id](https://www.cryptolux.org/images/0/0d/Argon2.pdf);
 * supports multiple vaults with different passwords;
 * has [CLI](https://en.wikipedia.org/wiki/Command-line_interface) interface pre-built binaries for macOS, Linux and Windows, but can be compiled for many other platforms too due to usage of underlying Go language;
 * may be used as an independent Go library.
