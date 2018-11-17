@@ -10,6 +10,14 @@
   version = "0.6.2"
 
 [[projects]]
+  branch = "master"
+  digest = "1:b5fa9691d8009da6a8ecd69d9f7240516a4dd7e5d2c73e25e1bf997cfe3d9e06"
+  name = "github.com/pinzolo/xdgdir"
+  packages = ["."]
+  pruneopts = ""
+  revision = "c5b4bdb0a9c4e6dbe5a907c2bccb245e53bcc772"
+
+[[projects]]
   digest = "1:7f569d906bdd20d906b606415b7d794f798f91a62fcfb6a4daa6d50690fb7a3f"
   name = "github.com/satori/go.uuid"
   packages = ["."]
@@ -52,6 +60,7 @@
   analyzer-version = 1
   input-imports = [
     "github.com/docopt/docopt-go",
+    "github.com/pinzolo/xdgdir",
     "github.com/satori/go.uuid",
     "golang.org/x/crypto/argon2",
     "golang.org/x/crypto/nacl/secretbox",

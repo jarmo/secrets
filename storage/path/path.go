@@ -1,12 +1,14 @@
 package path
 
 import (
+  "fmt"
   "path/filepath"
   "os"
   "os/user"
   "io/ioutil"
   "encoding/json"
   "errors"
+  "github.com/pinzolo/xdgdir"
 )
 
 type config struct {
@@ -42,7 +44,7 @@ func Store(vaultPath string, vaultAlias string) string {
 
 func configurations(path string) ([]config, error) {
   if configJSON, err := ioutil.ReadFile(path); os.IsNotExist(err) {
-    return make([]config, 0), errors.New("Vault not found! Create or specify one.")
+    return make([]config, 0), errors.New("Vault not found! Create one with initialize command or specify with --path or --alias switches.")
   } else {
     var conf []config
     if err := json.Unmarshal(configJSON, &conf); err == nil {
@@ -64,7 +66,33 @@ func findByAlias(configs []config, alias string) *config {
 }
 
 func configurationPath() string {
+  xdgApp := xdgdir.NewApp("secrets")
+  xdgConfigurationFilePath, err := xdgApp.ConfigFile("config.json")
+  if err != nil {
+    panic(err)
+  }
+
   currentUser, _ := user.Current()
   currentUserHome := currentUser.HomeDir
-  return filepath.Join(currentUserHome, "/.secrets.conf.json")
+  deprecatedConfigurationPath := filepath.Join(currentUserHome, "/.secrets.conf.json")
+
+  if _, err := os.Stat(deprecatedConfigurationPath); err == nil {
+    xdgConfigurationDir, err := xdgApp.ConfigDir()
+
+    if err != nil {
+      panic(err)
+    }
+
+    fmt.Println(fmt.Sprintf(`
+[WARN] current secrets configuration will stop working in the future major version!
+[WARN] XDG Base Directory (https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) needs to be used!
+
+Fix it with the following commands:
+mkdir -p %s
+mv %s %s
+`, xdgConfigurationDir, deprecatedConfigurationPath, xdgConfigurationFilePath))
+    return deprecatedConfigurationPath
+  } else {
+    return xdgConfigurationFilePath
+  }
 }
