@@ -40,7 +40,7 @@ func TestWrite(t *testing.T) {
 }
 
 func TestRead(t *testing.T) {
-  decryptedSecrets, err := Read("storage_test_input.json", []byte("secret-password"))
+  decryptedSecrets, err := Read("storage_test_scrypt_input.json", []byte("secret-password"))
 
   if err != nil {
     t.Fatal(err)
@@ -58,7 +58,7 @@ func TestRead(t *testing.T) {
 }
 
 func TestRead_WithInvalidPassword(t *testing.T) {
-  decryptedSecrets, err := Read("storage_test_input.json", []byte("wrong-password"))
+  decryptedSecrets, err := Read("storage_test_scrypt_input.json", []byte("wrong-password"))
 
   if len(decryptedSecrets) != 0 {
     t.Fatal(fmt.Sprintf("Expected no secrets, but got: %v", decryptedSecrets))

@@ -279,7 +279,7 @@ func prepareVault(t *testing.T) string {
   }
   vaultPathStr := vaultPath.Name()
 
-  if testVaultData, err := ioutil.ReadFile("vault_test_input.json"); err != nil {
+  if testVaultData, err := ioutil.ReadFile("vault_test_scrypt_input.json"); err != nil {
     t.Fatal(err)
   } else {
     if err := ioutil.WriteFile(vaultPathStr, testVaultData, 0600); err != nil {
