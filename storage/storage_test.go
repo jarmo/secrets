@@ -39,7 +39,37 @@ func TestWrite(t *testing.T) {
   }
 }
 
-func TestRead(t *testing.T) {
+func TestRead_UsingArgon2idKey(t *testing.T) {
+  decryptedSecrets, err := Read("storage_test_argon2id_input.json", []byte("secret-password"))
+
+  if err != nil {
+    t.Fatal(err)
+  }
+
+  expectedSecrets := secrets()
+  id1, _ := uuid.FromString("910fe994-f102-407e-a4bd-947444a2ecb1")
+  expectedSecrets[0].Id = id1
+  id2, _ := uuid.FromString("6acd0733-0f2c-4138-a4ad-9cc98b8b61cc")
+  expectedSecrets[1].Id = id2
+
+  if fmt.Sprintf("%v", decryptedSecrets) != fmt.Sprintf("%v", expectedSecrets) {
+    t.Fatal(fmt.Sprintf("Expected decrypted secrets to be %s, but got %s", expectedSecrets, decryptedSecrets))
+  }
+}
+
+func TestRead_WithInvalidPasswordUsingArgon2idKey(t *testing.T) {
+  decryptedSecrets, err := Read("storage_test_argon2id_input.json", []byte("wrong-password"))
+
+  if len(decryptedSecrets) != 0 {
+    t.Fatal(fmt.Sprintf("Expected no secrets, but got: %v", decryptedSecrets))
+  }
+
+  if err.Error() != "Invalid vault password!" {
+    t.Fatal(fmt.Sprintf("Expected invalid password error message but got: %v", err))
+  }
+}
+
+func TestRead_UsingScryptKey(t *testing.T) {
   decryptedSecrets, err := Read("storage_test_scrypt_input.json", []byte("secret-password"))
 
   if err != nil {
@@ -57,7 +87,7 @@ func TestRead(t *testing.T) {
   }
 }
 
-func TestRead_WithInvalidPassword(t *testing.T) {
+func TestRead_WithInvalidPasswordUsingScryptKey(t *testing.T) {
   decryptedSecrets, err := Read("storage_test_scrypt_input.json", []byte("wrong-password"))
 
   if len(decryptedSecrets) != 0 {
