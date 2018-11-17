@@ -134,6 +134,11 @@ yet another secret value line
 Just append `--alias` after any command to operate against selected vault.
 When `--alias` is not specified a first vault existing in configuration file will be used.
 
+## But how do I sync vault between different devices?!
+
+One way to sync would be to use any already existing syncing platforms like Dropbox, Microsoft OneDrive or Google Drive.
+Since you can specify vault storage location then it is up to you how (or if even) you sync.
+
 ## Development
 
 1. Install [dep](https://github.com/golang/dep) for dependency management.
