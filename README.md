@@ -19,15 +19,16 @@
 * does not allow to recover any passwords when vault password has been forgotten - there's no built-in backdoor;
 * does not generate any passwords - use [proper tools](https://linux.die.net/man/1/pwgen) for that, but avoid [improper ones](http://seclists.org/oss-sec/2018/q1/11);
 * does not auto-fill any passwords anywhere (you [don't want](https://freedom-to-tinker.com/2017/12/27/no-boundaries-for-user-identities-web-trackers-exploit-browser-login-managers/) that anyway) - it's up to you how you will fill your passwords;
-* does not have any mobile apps nor browser plugins - less chance of your secrets to be leaked;
+* does not have a running application when no password is needed for retrieval - less chance of your [secrets to be leaked](https://www.securityevaluators.com/casestudies/password-manager-hacking/);
+* does not have any mobile apps nor browser plugins - less possible attack vectors.
 
 ## Is it secure?
 
-**Yes**, as long as its underlying cryptography is not broken. However, there are no 100% secure systems and there's no way to guarantee that. All in all, I'd say that using this is more secure than using any other SaaS as a password manager because everything is under your control. The most secure system is not a software itself, but it's how and where you use it.
+**Yes**, as long as its underlying cryptography is not broken. However, there are no 100% secure systems and there's no way to guarantee that. All in all, I'd say that using this is more secure than using any SaaS as a password manager because everything is under your control. The most secure system is not a software itself, but it's how and where you use it.
 
 ## Installation
 
-Download latest binary from [releases](https://github.com/jarmo/secrets/releases) extract it and add it to somewhere in your **PATH**. That's it.
+Download latest binary from [releases](https://github.com/jarmo/secrets/releases), extract it and add it to somewhere in your **PATH**. That's it.
 
 *Of course, you're free to compile your own version of binary to be 100% sure that it has not been tampered with, since this is an open-source project after all.*
 
@@ -55,11 +56,11 @@ Options:
 
 ### Initializing Vault
 
-Vault needs to be initialized if there is going to be a default vault. Otherwise specifying `--path` or `--alias` with any command is supported. Initializing vault just stores location and alias to your vault into a configuration file:
+Vault needs to be initialized if there is going to be a default vault. Otherwise specifying `--path` or `--alias` with any command is supported. Initializing vault just stores location and alias to your vault into a configuration file (supporting [XDG Base Directory standard](https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html)):
 
 ```
 $ secrets initialize --path /home/user/.secrets.json --alias main
-Vault successfully configured at /home/user/.secrets.conf.json and is ready to store your secrets!
+Vault successfully configured at /home/user/.config/secrets/config.json and is ready to store your secrets!
 ```
 
 ### Adding a New Secret
@@ -155,4 +156,4 @@ make install
 
 ## Background Story
 
-I've used [LastPass](https://www.lastpass.com/) and [mitro](http://www.mitro.co/) in the past to store my secrets, but didn't feel too secure with either of them due to security vulnerabilities and/or one of them being shut down. I've got enough of switching between different managers and decided to write my own. I did write a version of **secrets** in Ruby a few years ago, but decided to give Go a try due to its portability features and here's the result. I've also decided to use a cryptographic library called libsodium. I've done my best, but there's no guarantees that it's secure.
+I've used [LastPass](https://www.lastpass.com/) and [mitro](http://www.mitro.co/) in the past to store my secrets, but didn't feel too secure with either of them due to security vulnerabilities and/or one of them being shut down. I've got enough of switching between different managers and decided to write my own. I did write a version of **secrets** in Ruby a few years ago, but decided to give Go a try due to its portability features and here's the result. I've also decided to use a cryptographic library called libsodium, which is secure and has an easy API for avoiding making stupid mistakes.
