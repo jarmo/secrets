@@ -39,7 +39,7 @@ func Encrypt(password []byte, secrets []secret.Secret) Encrypted {
     time := 1
     memory := 64*1024
     threads := 4
-    secretKey := argon2idSecretKey(password, salt, argon2idParams{Time: 1, Memory: 64*1024, Threads: 4})
+    secretKey := argon2idSecretKey(password, salt, argon2idParams{Time: time, Memory: memory, Threads: threads})
     var nonce [24]byte
     copy(nonce[:], generateRandomBytes(24))
 
