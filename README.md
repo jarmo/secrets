@@ -20,7 +20,8 @@
 * does not generate any passwords - use [proper tools](https://linux.die.net/man/1/pwgen) for that, but avoid [improper ones](http://seclists.org/oss-sec/2018/q1/11);
 * does not auto-fill any passwords anywhere (you [don't want](https://freedom-to-tinker.com/2017/12/27/no-boundaries-for-user-identities-web-trackers-exploit-browser-login-managers/) that anyway) - it's up to you how you will fill your passwords;
 * does not have a running application when no password is needed for retrieval - less chance of your [secrets to be leaked](https://www.securityevaluators.com/casestudies/password-manager-hacking/);
-* does not have any mobile apps nor browser plugins - less possible attack vectors.
+* does not have any mobile apps nor browser plugins - less possible attack vectors;
+* does not [remove already existing features](https://discussions.agilebits.com/discussion/105305/standalone-local-vault-option-gone) - always possibility to create your own fork since it is an open-source software and will be like that.
 
 ## Is it secure?
 
