@@ -2,7 +2,7 @@ package command
 
 import (
   "fmt"
-  "github.com/jarmo/secrets/storage/path"
+  "github.com/jarmo/secrets/v5/storage/path"
 )
 
 type Initialize struct {

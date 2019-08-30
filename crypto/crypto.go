@@ -9,7 +9,7 @@ import (
   "golang.org/x/crypto/scrypt"
   "golang.org/x/crypto/argon2"
   "golang.org/x/crypto/nacl/secretbox"
-  "github.com/jarmo/secrets/secret"
+  "github.com/jarmo/secrets/v5/secret"
 )
 
 type scryptParams struct {

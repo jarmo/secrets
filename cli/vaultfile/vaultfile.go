@@ -3,10 +3,10 @@ package vaultfile
 import (
   "fmt"
   "os"
-  "github.com/jarmo/secrets/storage"
-  "github.com/jarmo/secrets/storage/path"
-  "github.com/jarmo/secrets/input"
-  "github.com/jarmo/secrets/secret"
+  "github.com/jarmo/secrets/v5/storage"
+  "github.com/jarmo/secrets/v5/storage/path"
+  "github.com/jarmo/secrets/v5/input"
+  "github.com/jarmo/secrets/v5/secret"
 )
 
 func Read(vaultPath string) ([]secret.Secret, string, []byte) {

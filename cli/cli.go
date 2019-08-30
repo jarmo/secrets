@@ -3,7 +3,7 @@ package cli
 import (
   "github.com/docopt/docopt-go"
   "github.com/satori/go.uuid"
-  "github.com/jarmo/secrets/cli/command"
+  "github.com/jarmo/secrets/v5/cli/command"
 )
 
 func Command(version string, args []string) command.Executable {

@@ -6,8 +6,8 @@ import (
   "os"
   "io/ioutil"
   "github.com/satori/go.uuid"
-  "github.com/jarmo/secrets/secret"
-  "github.com/jarmo/secrets/storage"
+  "github.com/jarmo/secrets/v5/secret"
+  "github.com/jarmo/secrets/v5/storage"
 )
 
 func TestListUsingArgon2idKey(t *testing.T) {

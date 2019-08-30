@@ -2,7 +2,7 @@ package main
 
 import (
   "os"
-  "github.com/jarmo/secrets/cli"
+  "github.com/jarmo/secrets/v5/cli"
 )
 
 const VERSION = "5.0.0"

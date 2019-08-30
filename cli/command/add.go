@@ -2,10 +2,10 @@ package command
 
 import (
   "fmt"
-  "github.com/jarmo/secrets/cli/vaultfile"
-  "github.com/jarmo/secrets/storage"
-  "github.com/jarmo/secrets/vault"
-  "github.com/jarmo/secrets/input"
+  "github.com/jarmo/secrets/v5/cli/vaultfile"
+  "github.com/jarmo/secrets/v5/storage"
+  "github.com/jarmo/secrets/v5/vault"
+  "github.com/jarmo/secrets/v5/input"
 )
 
 type Add struct {

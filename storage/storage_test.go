@@ -6,8 +6,8 @@ import (
   "io/ioutil"
   "os"
   "encoding/json"
-  "github.com/jarmo/secrets/secret"
-  "github.com/jarmo/secrets/crypto"
+  "github.com/jarmo/secrets/v5/secret"
+  "github.com/jarmo/secrets/v5/crypto"
   "github.com/satori/go.uuid"
 )
 

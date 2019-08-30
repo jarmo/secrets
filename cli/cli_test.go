@@ -2,7 +2,7 @@ package cli
 
 import (
   "testing"
-  "github.com/jarmo/secrets/cli/command"
+  "github.com/jarmo/secrets/v5/cli/command"
   "github.com/satori/go.uuid"
 )
 

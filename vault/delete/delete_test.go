@@ -3,7 +3,7 @@ package delete
 import (
   "testing"
   "fmt"
-  "github.com/jarmo/secrets/secret"
+  "github.com/jarmo/secrets/v5/secret"
 )
 
 func TestExecute(t *testing.T) {
