@@ -1,5 +1,6 @@
 BINARY = secrets
 GOARCH = amd64
+GO_BUILD = GOARCH=${GOARCH} go build -mod=vendor
 PREFIX ?= ${GOPATH}
 
 all: test clean linux darwin windows
@@ -7,16 +8,19 @@ all: test clean linux darwin windows
 clean:
 	rm -rf bin/
 
-linux:
-	GOOS=linux GOARCH=${GOARCH} go build -o bin/linux_${GOARCH}/${BINARY}
+vendor:
+	go mod vendor
 
-darwin:
-	GOOS=darwin GOARCH=${GOARCH} go build -o bin/darwin_${GOARCH}/${BINARY}
+linux: vendor
+	GOOS=linux ${GO_BUILD} -o bin/linux_${GOARCH}/${BINARY}
 
-windows:
-	GOOS=windows GOARCH=${GOARCH} go build -o bin/windows_${GOARCH}/${BINARY}.exe
+darwin: vendor
+	GOOS=darwin ${GO_BUILD} -o bin/darwin_${GOARCH}/${BINARY}
 
-test:
+windows: vendor
+	GOOS=windows ${GO_BUILD} -o bin/windows_${GOARCH}/${BINARY}.exe
+
+test: vendor
 	script/run_tests.sh
 
 install:
@@ -25,4 +29,4 @@ install:
 release: all
 	script/release.sh
 
-.PHONY: all test clean linux darwin windows install
+.PHONY: all test clean vendor linux darwin windows install

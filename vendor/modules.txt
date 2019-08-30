@@ -1,0 +1,20 @@
+# github.com/docopt/docopt-go v0.0.0-20160216232012-784ddc588536
+github.com/docopt/docopt-go
+# github.com/pinzolo/xdgdir v0.0.0-20180220135956-c5b4bdb0a9c4
+github.com/pinzolo/xdgdir
+# github.com/satori/go.uuid v1.2.0
+github.com/satori/go.uuid
+# golang.org/x/crypto v0.0.0-20181112202954-3d3f9f413869
+golang.org/x/crypto/argon2
+golang.org/x/crypto/nacl/secretbox
+golang.org/x/crypto/scrypt
+golang.org/x/crypto/ssh/terminal
+golang.org/x/crypto/blake2b
+golang.org/x/crypto/internal/subtle
+golang.org/x/crypto/poly1305
+golang.org/x/crypto/salsa20/salsa
+golang.org/x/crypto/pbkdf2
+# golang.org/x/sys v0.0.0-20181107165924-66b7b1311ac8
+golang.org/x/sys/cpu
+golang.org/x/sys/unix
+golang.org/x/sys/windows
