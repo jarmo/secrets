@@ -143,17 +143,15 @@ Since you can specify vault storage location then it is up to you how (or if eve
 
 ## Development
 
-1. Install [dep](https://github.com/golang/dep) for dependency management.
-
-2. Retrieve, build and install binaries to `$GOPATH/bin/`
+Retrieve dependencies, build and install binaries to `$GOPATH/bin/`
 
 ```
 go get -u github.com/jarmo/secrets
 cd $GOPATH/src/github.com/jarmo/secrets
-dep ensure
 make
 make install
 ```
+
 
 ## Background Story
 

@@ -20,7 +20,7 @@ test:
 	script/run_tests.sh
 
 install:
-	cp -Rf bin/ "${PREFIX}"/bin
+	cp -Rf bin/ "${PREFIX}/bin"
 
 release: all
 	script/release.sh
