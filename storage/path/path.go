@@ -1,10 +1,7 @@
 package path
 
 import (
-  "fmt"
-  "path/filepath"
   "os"
-  "os/user"
   "io/ioutil"
   "encoding/json"
   "errors"
@@ -72,27 +69,5 @@ func configurationPath() string {
     panic(err)
   }
 
-  currentUser, _ := user.Current()
-  currentUserHome := currentUser.HomeDir
-  deprecatedConfigurationPath := filepath.Join(currentUserHome, "/.secrets.conf.json")
-
-  if _, err := os.Stat(deprecatedConfigurationPath); err == nil {
-    xdgConfigurationDir, err := xdgApp.ConfigDir()
-
-    if err != nil {
-      panic(err)
-    }
-
-    fmt.Println(fmt.Sprintf(`
-[WARN] current secrets configuration will stop working in the future major version!
-[WARN] XDG Base Directory (https://standards.freedesktop.org/basedir-spec/basedir-spec-latest.html) needs to be used!
-
-Fix it with the following commands:
-mkdir -p %s
-mv %s %s
-`, xdgConfigurationDir, deprecatedConfigurationPath, xdgConfigurationFilePath))
-    return deprecatedConfigurationPath
-  } else {
-    return xdgConfigurationFilePath
-  }
+  return xdgConfigurationFilePath
 }
