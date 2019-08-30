@@ -7,12 +7,10 @@ fi
 
 git push
 
-VERSION=`grep "VERSION =" secrets.go | awk '{print $4}' | tr -d '"'`
-echo "Enter changelog to release version $VERSION: "
-read -r CHANGELOG
-echo "Enter github password: "
-read -s PASSWORD
-RESPONSE=`http -ba jarmo:$PASSWORD POST "https://api.github.com/repos/jarmo/secrets/releases" tag_name="v$VERSION" draft:=true name="secrets $VERSION" body="$CHANGELOG"`
+VERSION=v`grep "VERSION =" secrets.go | awk '{print $4}' | tr -d '"'`
+read -rp "Enter changelog to release version $VERSION: " CHANGELOG
+read -sp "Enter GitHub password: " PASSWORD
+RESPONSE=`http -ba jarmo:$PASSWORD POST "https://api.github.com/repos/jarmo/secrets/releases" tag_name="$VERSION" draft:=true name="secrets $VERSION" body="$CHANGELOG"`
 
 rm -rf dist
 mkdir -p dist
