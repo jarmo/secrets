@@ -5,38 +5,11 @@ import (
   "io/ioutil"
   "encoding/json"
   "errors"
-  "github.com/pinzolo/xdgdir"
 )
 
 type Config struct {
   Path string
   Alias string
-}
-
-func Get(alias string) (string, error) {
-  if configs, err := Configurations(configurationPath()); err == nil {
-    if confByAlias := FindByAlias(configs, alias); confByAlias != nil {
-      return confByAlias.Path, nil
-    } else {
-      return configs[0].Path, nil
-    }
-  } else {
-    return "", err
-  }
-}
-
-func Store(vaultPath string, vaultAlias string) string {
-  configurationPath := configurationPath()
-  conf, _ := Configurations(configurationPath)
-  conf = append(conf, Config{Path: vaultPath, Alias: vaultAlias})
-
-  if configJSON, err := json.MarshalIndent(conf, "", " "); err != nil {
-    panic(err)
-  } else if err := ioutil.WriteFile(configurationPath, configJSON, 0600); err != nil {
-    panic(err)
-  }
-
-  return configurationPath
 }
 
 func Configurations(path string) ([]Config, error) {
@@ -62,12 +35,3 @@ func FindByAlias(configs []Config, alias string) *Config {
   return nil
 }
 
-func configurationPath() string {
-  xdgApp := xdgdir.NewApp("secrets")
-  xdgConfigurationFilePath, err := xdgApp.ConfigFile("config.json")
-  if err != nil {
-    panic(err)
-  }
-
-  return xdgConfigurationFilePath
-}
