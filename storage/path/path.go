@@ -15,7 +15,7 @@ type Config struct {
 
 func Get(alias string) (string, error) {
   if configs, err := Configurations(configurationPath()); err == nil {
-    if confByAlias := findByAlias(configs, alias); confByAlias != nil {
+    if confByAlias := FindByAlias(configs, alias); confByAlias != nil {
       return confByAlias.Path, nil
     } else {
       return configs[0].Path, nil
@@ -52,7 +52,7 @@ func Configurations(path string) ([]Config, error) {
   }
 }
 
-func findByAlias(configs []Config, alias string) *Config {
+func FindByAlias(configs []Config, alias string) *Config {
   for _, config := range configs {
     if config.Alias == alias {
       return &config
