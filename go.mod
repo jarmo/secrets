@@ -1,4 +1,4 @@
-module github.com/jarmo/secrets/v5
+module github.com/jarmo/secrets
 
 go 1.12
 

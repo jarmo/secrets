@@ -3,7 +3,7 @@ package edit
 import (
   "testing"
   "fmt"
-  "github.com/jarmo/secrets/v5/secret"
+  "github.com/jarmo/secrets/secret"
 )
 
 func TestExecute(t *testing.T) {

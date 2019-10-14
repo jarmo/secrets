@@ -3,7 +3,7 @@ package crypto
 import (
   "testing"
   "fmt"
-  "github.com/jarmo/secrets/v5/secret"
+  "github.com/jarmo/secrets/secret"
 )
 
 func TestEncryption(t *testing.T) {

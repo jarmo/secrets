@@ -7,7 +7,7 @@ import (
   "errors"
   "golang.org/x/crypto/argon2"
   "golang.org/x/crypto/nacl/secretbox"
-  "github.com/jarmo/secrets/v5/secret"
+  "github.com/jarmo/secrets/secret"
 )
 
 type argon2idParams struct {
