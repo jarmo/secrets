@@ -3,7 +3,6 @@ module github.com/jarmo/secrets/v5
 go 1.12
 
 require (
-	github.com/docopt/docopt-go v0.0.0-20160216232012-784ddc588536
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/pinzolo/xdgdir v0.0.0-20180220135956-c5b4bdb0a9c4
 	github.com/satori/go.uuid v1.2.0
