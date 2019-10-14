@@ -27,7 +27,8 @@
 
 ## Usage
 
-Best examples of using this library is to look at [CLI](https://github.com/jarmo/secrets-cli) and [Web](https://github.com/jarmo/secrets-web) implementations.
+It is possible to use secrets from [command line](https://github.com/jarmo/secrets-cli), as a [self-hosted web application](https://github.com/jarmo/secrets-web)
+or as a library.
 
 ## But how do I sync vault between different devices?!
 
