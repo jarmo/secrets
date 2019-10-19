@@ -40,6 +40,8 @@ Since you can specify vault storage location then it is up to you how (or if eve
 Retrieve dependencies and run tests
 
 ```
+git clone https://github.com/jarmo/secrets.git
+cd secrets
 make
 ```
 
