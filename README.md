@@ -30,11 +30,6 @@
 It is possible to use secrets from [command line](https://github.com/jarmo/secrets-cli), as a [self-hosted web application](https://github.com/jarmo/secrets-web)
 or as a library.
 
-## But how do I sync vault between different devices?!
-
-One way to sync would be to use any already existing syncing platforms like Dropbox, Microsoft OneDrive or Google Drive.
-Since you can specify vault storage location then it is up to you how (or if even) you sync.
-
 ## Development
 
 Retrieve dependencies and run tests
