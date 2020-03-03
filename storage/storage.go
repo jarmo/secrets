@@ -13,12 +13,6 @@ import (
 )
 
 func Read(path string, password []byte) ([]secret.Secret, error) {
-	if fileLock, err := lock(path); err != nil {
-		panic(err)
-	} else {
-		defer fileLock.Unlock()
-	}
-
 	if encryptedSecretsJSON, err := ioutil.ReadFile(path); os.IsNotExist(err) {
 		return make([]secret.Secret, 0), nil
 	} else {
