@@ -16,6 +16,7 @@
 
 * does not sync your secrets to any cloud - you have [complete control](https://palant.de/2019/03/18/should-you-be-concerned-about-lastpass-uploading-your-passwords-to-its-server/) over them;
 * does not allow to recover any passwords when vault password has been forgotten - there's no built-in backdoor;
+* does not [leak anything to 3rd parties](https://reports.exodus-privacy.eu.org/en/reports/165465/) - only you know about your secrets;
 * does not generate any passwords - use [proper tools](https://linux.die.net/man/1/pwgen) for that, but avoid [improper ones](http://seclists.org/oss-sec/2018/q1/11);
 * does not auto-fill any passwords anywhere (you [don't want](https://freedom-to-tinker.com/2017/12/27/no-boundaries-for-user-identities-web-trackers-exploit-browser-login-managers/) that anyway) - it's up to you how you will fill your passwords;
 * does not have any mobile apps nor browser plugins - less possible attack vectors;
