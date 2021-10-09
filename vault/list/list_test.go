@@ -8,7 +8,7 @@ import (
 
 func TestExecute_WithNameFilter(t *testing.T) {
   secret1 := secret.New("foo", "goo")
-  secret2 := secret.New("baz", "boo")
+  secret2 := secret.New("Baz", "boo")
   secret3 := secret.New("bar", "brr")
   secrets := [...]secret.Secret{secret1, secret2, secret3}
 
@@ -23,7 +23,7 @@ func TestExecute_WithNameFilter(t *testing.T) {
 
 func TestExecute_WithValueFilter(t *testing.T) {
   secret1 := secret.New("foo", "goo")
-  secret2 := secret.New("baz", "boo")
+  secret2 := secret.New("Baz", "boo")
   secret3 := secret.New("bar", "brr")
   secrets := [...]secret.Secret{secret1, secret2, secret3}
 
@@ -38,7 +38,7 @@ func TestExecute_WithValueFilter(t *testing.T) {
 
 func TestExecute_WithIdFilter(t *testing.T) {
   secret1 := secret.New("foo", "goo")
-  secret2 := secret.New("baz", "boo")
+  secret2 := secret.New("Baz", "boo")
   secret3 := secret.New("bar", "brr")
   secrets := [...]secret.Secret{secret1, secret2, secret3}
 
@@ -53,7 +53,7 @@ func TestExecute_WithIdFilter(t *testing.T) {
 
 func TestExecute_WithoutAnyFilter(t *testing.T) {
   secret1 := secret.New("foo", "goo")
-  secret2 := secret.New("baz", "boo")
+  secret2 := secret.New("Baz", "boo")
   secret3 := secret.New("bar", "brr")
   secrets := [...]secret.Secret{secret1, secret2, secret3}
 
