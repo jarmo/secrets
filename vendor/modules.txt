@@ -5,7 +5,7 @@ github.com/juju/fslock
 ## explicit
 github.com/satori/go.uuid
 # golang.org/x/crypto v0.8.0
-## explicit
+## explicit; go 1.17
 golang.org/x/crypto/argon2
 golang.org/x/crypto/blake2b
 golang.org/x/crypto/internal/alias
@@ -13,6 +13,7 @@ golang.org/x/crypto/internal/poly1305
 golang.org/x/crypto/nacl/secretbox
 golang.org/x/crypto/salsa20/salsa
 # golang.org/x/sys v0.7.0
+## explicit; go 1.17
 golang.org/x/sys/cpu
 # gopkg.in/check.v1 v1.0.0-20201130134442-10cb98267c6c
-## explicit
+## explicit; go 1.11
